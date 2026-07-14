@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23060a10%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2211.5%22%20fill%3D%22none%22%20stroke%3D%22%2312525c%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2244%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-monospace%2CSFMono-Regular%2CMenlo%2Cmonospace%22%20font-size%3D%2232%22%20font-weight%3D%22700%22%20fill%3D%22%2335c7d6%22%3EHA%3C%2Ftext%3E%3Ccircle%20cx%3D%2252.5%22%20cy%3D%2212.5%22%20r%3D%224.5%22%20fill%3D%22%233ecf8e%22%2F%3E%3C%2Fsvg%3E">
+<title>Hani Alsulami — Casework &amp; Research Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:        #060a10;
+    --bg-panel:  #0b131c;
+    --line:      #1a2733;
+    --text:      #d8e6ee;
+    --text-dim:  #7690a0;
+    --text-faint:#43596a;
+    --amber:     #35c7d6;
+    --amber-dim: #12525c;
+    --red:       #e5484d;
+    --green:     #3ecf8e;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  ::selection{ background:var(--amber); color:#060a10; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--text); font-family:'IBM Plex Sans', sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  body::before{
+    content:""; position:fixed; inset:0;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    pointer-events:none; z-index:9999; opacity:0.5;
+  }
+
+  header{
+    position:fixed; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
+    padding:20px 6vw; z-index:100; backdrop-filter: blur(8px); background:rgba(6,10,16,0.75); border-bottom:1px solid var(--line);
+  }
+  .logo{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:14px; letter-spacing:0.5px; color:var(--amber); }
+  .logo span{ color:var(--text-dim); }
+  nav ul{ list-style:none; display:flex; gap:36px; }
+  nav a{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-dim); letter-spacing:0.5px; transition:color .2s; }
+  nav a::before{ content:"./"; color:var(--text-faint); }
+  nav a:hover{ color:var(--amber); }
+  nav a.active{ color:var(--amber); }
+  @media (max-width: 720px){ nav ul{ gap:20px; } }
+
+  main{ padding:150px 6vw 60px; max-width:900px; }
+  .section-tag{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-faint); margin-bottom:14px; letter-spacing:0.5px; }
+  .section-tag .t{ color:var(--amber); }
+  h1{ font-family:'IBM Plex Mono', monospace; font-size:clamp(30px,5vw,52px); font-weight:700; letter-spacing:-0.5px; margin-bottom:20px; }
+  .intro{ color:var(--text-dim); max-width:64ch; margin-bottom:20px; font-size:15px; }
+  .note{
+    font-size:12.5px; color:var(--text-faint); margin-bottom:56px; max-width:64ch;
+    border-left:2px solid var(--amber-dim); padding-left:14px;
+  }
+
+  .case-list{ display:flex; flex-direction:column; }
+  .case{ display:grid; grid-template-columns:110px 1fr; gap:28px; padding:28px 0; border-bottom:1px solid var(--line); }
+  .case:last-child{ border-bottom:none; }
+  @media (max-width:640px){ .case{ grid-template-columns:1fr; gap:10px; } }
+  .case .ts{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--text-faint); padding-top:3px; }
+  .case .sev{ display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:10px; padding:3px 8px; border-radius:3px; }
+  .sev.high{ background:rgba(229,72,77,0.12); color:var(--red); border:1px solid rgba(229,72,77,0.3); }
+  .sev.med{ background:rgba(53,199,214,0.1); color:var(--amber); border:1px solid rgba(53,199,214,0.3); }
+  .case h3{ font-family:'IBM Plex Mono', monospace; font-size:16.5px; font-weight:600; margin-bottom:8px; }
+  .case p{ color:var(--text-dim); font-size:14.5px; max-width:64ch; margin-bottom:10px; }
+  .case .src{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--amber); }
+  .case .src:hover{ text-decoration:underline; }
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:13px;
+    color:var(--text-dim); margin-top:50px; border:1px solid var(--line); padding:12px 20px; border-radius:3px; transition:all .2s;
+  }
+  .back-link:hover{ color:var(--amber); border-color:var(--amber-dim); }
+
+  footer{
+    padding:30px 6vw; display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; color:var(--text-faint); flex-wrap:wrap; gap:10px; border-top:1px solid var(--line);
+  }
+
+  [data-reveal]{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  [data-reveal].in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } [data-reveal]{ opacity:1; transform:none; transition:none; } }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">HA<span>_soc</span></a>
+  <nav>
+    <ul>
+      <li><a href="index.html#about">about</a></li>
+      <li><a href="index.html#skills">skills</a></li>
+      <li><a href="threat-hunting.html">threat hunting</a></li>
+      <li><a href="detection-engineer.html">detection eng.</a></li>
+      <li><a href="index.html#certs">certs</a></li>
+      <li><a href="research.html" class="active">casework</a></li>
+      <li><a href="index.html#contact">contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="section-tag"><span class="t">[00:00:04]</span> COMMAND — case log</div>
+  <h1>Casework &amp; research notes</h1>
+  <p class="intro">
+    Write-ups I've published on emerging CVEs, forensic artifacts, and detection
+    techniques — summarized here in my own words, with a link to the original
+    post for the full technical detail.
+  </p>
+  <p class="note">
+    Each entry links out to the original LinkedIn post rather than reproducing it —
+    that's where the full write-up, IOCs, and any scripts actually live.
+  </p>
+
+  <div class="case-list">
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2024</div>
+      <div>
+        <span class="sev high">HIGH</span>
+        <h3>Outlook credential-leak PoC (CVE‑2024‑21413)</h3>
+        <p>Built and published a proof-of-concept script demonstrating an Outlook
+        information-disclosure flaw capable of leaking password hashes, with clear
+        ethical-use guidance for defenders testing their own environments.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_dfir-soc-cyberdefense-activity-7052369302972227584-_6R2" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2024</div>
+      <div>
+        <span class="sev high">HIGH</span>
+        <h3>Exchange privilege-escalation advisory (CVE‑2024‑21410)</h3>
+        <p>Broke down an actively-exploited Exchange privilege-escalation flaw —
+        how it lets an attacker act on a victim's behalf, and what response teams
+        should watch for while patches roll out.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_dfir-soc-cyberdefense-activity-7052369302972227584-_6R2" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev high">HIGH</span>
+        <h3>Cisco IOS XE zero‑day breakdown (CVE‑2023‑20198)</h3>
+        <p>Analyzed an unpatched WebUI exploit chain enabling arbitrary command
+        execution on affected devices, and published a mitigation (disabling the
+        exposed HTTP service) ahead of an official Cisco patch.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_dfir-digitalforensics-incidentresponse-activity-7088219833351176192-dxfr" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>AnyDesk forensic artifact &amp; log analysis</h3>
+        <p>Documented the forensic artifacts remote-access tooling like AnyDesk
+        leaves behind on a host — a reference for spotting unauthorized remote
+        sessions during an investigation.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_forensic-analysis-to-anydesk-forensic-artifacts-activity-7100453284267630593-ts-F" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>PSCredential object abuse for payload smuggling</h3>
+        <p>Explained a technique for hiding malicious PowerShell payloads inside
+        encrypted PSCredential objects to evade plain-text command inspection —
+        with monitoring recommendations for blue teams.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_forensic-analysis-to-anydesk-forensic-artifacts-activity-7100453284267630593-ts-F" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>svchost.exe abuse — detection queries</h3>
+        <p>Built detection logic for common svchost masquerading and injection
+        techniques used to blend malicious processes into normal Windows activity,
+        aimed at SOC and CERT teams tuning their SIEM.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_cve-2023-24488yaml-activity-7087410100826439680-qcCJ" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>USB device forensics via Setupapi logs</h3>
+        <p>Walked through how Windows' setupapi.dev.log records device connection
+        history — serial numbers, first/last connection times — and how that log
+        helps reconstruct external-device activity during an investigation.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_cve-2023-24488yaml-activity-7087410100826439680-qcCJ" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>Pagefile analysis as a forensic evidence source</h3>
+        <p>Covered why the Windows pagefile is worth examining during an
+        investigation — it can retain fragments of user activity, and occasionally
+        credentials or keys that were in memory — along with tooling notes for
+        pulling data out of it before it's overwritten.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_dfir-soc-cyberdefense-activity-7052369302972227584-_6R2" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+    <div class="case" data-reveal>
+      <div class="ts mono">2023</div>
+      <div>
+        <span class="sev med">MED</span>
+        <h3>Web shell persistence via compiled ASP.NET files</h3>
+        <p>Broke down how attackers who upload a web shell to a compromised web
+        server gain persistent access, and how decompiling the resulting temporary
+        ASP.NET binaries (e.g. with dnSpy) can recover human-readable code for
+        analysis — using a China Chopper-style shell as the working example.</p>
+        <a class="src" href="https://www.linkedin.com/posts/hani-alsulami_abuse-svchost-activity-7112059408062279681-GsYb" target="_blank" rel="noopener">Read the original post ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="back-link" href="index.html">&larr; back to profile</a>
+</main>
+
+<footer>
+  <div>© <span id="year"></span> Hani Alsulami — SOC Manager, Cyber Defense</div>
+  <div>build: v1.0 · status: <span style="color:var(--green)">online</span></div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const els = document.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
