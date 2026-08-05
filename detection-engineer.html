@@ -115,6 +115,67 @@
   .uc-card p{ font-size:13px; color:var(--text-dim); margin-bottom:0; }
   .uc-card p b{ color:var(--text-faint); font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; margin-right:6px; font-weight:400; }
 
+  .mhl-wrap{ margin-bottom:70px; }
+  .mhl-searchbox{ position:relative; margin-bottom:10px; }
+  .mhl-input{
+    width:100%; background:var(--bg-panel); border:1px solid var(--line); border-radius:6px;
+    padding:14px 16px; color:var(--text); font-family:'IBM Plex Mono', monospace; font-size:14px; outline:none;
+    transition:border-color .2s;
+  }
+  .mhl-input:focus{ border-color:var(--amber-dim); }
+  .mhl-suggest{
+    position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:6px;
+    max-height:320px; overflow-y:auto; display:none; box-shadow:0 12px 28px rgba(0,0,0,0.4);
+  }
+  .mhl-suggest.open{ display:block; }
+  .mhl-suggest-item{ padding:10px 14px; cursor:pointer; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .mhl-suggest-item:last-child{ border-bottom:none; }
+  .mhl-suggest-item:hover, .mhl-suggest-item.active{ background:rgba(53,199,214,0.08); }
+  .mhl-suggest-name{ font-family:'IBM Plex Mono', monospace; font-size:13px; }
+  .mhl-suggest-alias{ font-size:11px; color:var(--text-faint); }
+  .mhl-suggest-id{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-faint); }
+  .mhl-status{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-faint); margin-bottom:20px; min-height:16px; }
+  .mhl-panel{ background:var(--bg-panel); border:1px solid var(--line); border-radius:8px; padding:26px 5vw 26px 26px; }
+  .mhl-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:12px; margin-bottom:6px; }
+  .mhl-head h3{ font-family:'IBM Plex Mono', monospace; font-size:22px; }
+  .mhl-attackid{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); border:1px solid var(--amber-dim); padding:2px 8px; border-radius:3px; }
+  .mhl-attackid a:hover{ text-decoration:underline; }
+  .mhl-kind{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.5px; }
+  .mhl-aliases{ font-size:12.5px; color:var(--text-dim); margin-bottom:16px; }
+  .mhl-desc{ font-size:13.5px; color:var(--text-dim); max-width:74ch; }
+  .mhl-desc a{ color:var(--text); border-bottom:1px dotted var(--text-faint); }
+  .mhl-stats{ display:flex; gap:10px; flex-wrap:wrap; margin:20px 0 24px; }
+  .mhl-stat{ background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:10px 16px; min-width:100px; }
+  .mhl-stat b{ display:block; font-family:'IBM Plex Mono', monospace; font-size:20px; color:var(--amber); }
+  .mhl-stat span{ font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.5px; }
+  .mhl-section-label{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.5px; margin:22px 0 10px; }
+  .mhl-tactics{ display:flex; flex-direction:column; gap:10px; }
+  .mhl-tactic-row{ display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; }
+  .mhl-tactic-name{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.5px; min-width:110px; padding-top:5px; }
+  .mhl-tech-chip{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); border:1px solid var(--line); border-radius:3px; padding:3px 8px; transition:all .15s; }
+  .mhl-tech-chip:hover{ color:var(--amber); border-color:var(--amber-dim); }
+  .mhl-rule-controls{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+  .mhl-level-btn{ font-family:'IBM Plex Mono', monospace; font-size:11px; padding:5px 10px; border-radius:3px; border:1px solid var(--line); color:var(--text-faint); cursor:pointer; background:none; text-transform:uppercase; letter-spacing:.5px; transition:all .15s; }
+  .mhl-level-btn.active{ border-color:var(--amber-dim); color:var(--amber); }
+  .mhl-rules{ display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .mhl-rule{ background:var(--bg-panel); padding:14px 16px; display:flex; justify-content:space-between; gap:14px; align-items:flex-start; flex-wrap:wrap; }
+  .mhl-rule-main{ flex:1; min-width:220px; }
+  .mhl-rule-title{ font-size:13.5px; margin-bottom:4px; }
+  .mhl-rule-meta{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-faint); }
+  .mhl-rule-links{ display:flex; gap:10px; align-items:center; }
+  .mhl-rule-links a{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); border:1px solid var(--line); padding:5px 10px; border-radius:3px; transition:all .15s; }
+  .mhl-rule-links a:hover{ color:var(--amber); border-color:var(--amber-dim); }
+  .mhl-level{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; padding:2px 8px; border-radius:3px; white-space:nowrap; text-transform:uppercase; align-self:center; }
+  .mhl-level.critical{ background:rgba(229,72,77,0.14); color:var(--red); border:1px solid rgba(229,72,77,0.35); }
+  .mhl-level.high{ background:rgba(53,199,214,0.1); color:var(--amber); border:1px solid rgba(53,199,214,0.3); }
+  .mhl-level.medium{ background:rgba(118,144,160,0.12); color:var(--text-dim); border:1px solid var(--line); }
+  .mhl-level.low, .mhl-level.informational{ background:rgba(118,144,160,0.06); color:var(--text-faint); border:1px solid var(--line); }
+  .mhl-more{ text-align:center; padding:12px; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-dim); cursor:pointer; background:var(--bg-panel); }
+  .mhl-more:hover{ color:var(--amber); }
+  .mhl-empty{ color:var(--text-faint); font-size:13px; padding:20px 0; }
+  .mhl-source-note{ font-size:11.5px; color:var(--text-faint); margin-top:18px; }
+
   .back-link{
     display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:13px;
     color:var(--text-dim); margin-top:20px; border:1px solid var(--line); padding:12px 20px; border-radius:3px; transition:all .2s;
@@ -160,8 +221,35 @@
 </div>
 
 <main>
-  <div class="section-tag"><span class="t">[00:00:03.5]</span> COMMAND — coverage backlog</div>
+  <div class="section-tag"><span class="t">[00:00:03.5]</span> COMMAND — malware hunt lookup</div>
   <h1>Detection Engineering</h1>
+  <p class="intro">
+    Search a malware family, RAT, or offensive tool by name or alias. It cross-references the
+    <a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&amp;CK</a> techniques
+    that sample is documented to use with matching community
+    <a href="https://github.com/SigmaHQ/sigma" target="_blank" rel="noopener">Sigma</a> detection rules
+    (surfaced via <a href="https://detection.fyi/" target="_blank" rel="noopener">detection.fyi</a>) and
+    <a href="https://malpedia.caad.fkie.fraunhofer.de/" target="_blank" rel="noopener">Malpedia</a> profile
+    data — a starting point for how to actually hunt it, not just a name.
+  </p>
+  <p class="note">
+    Static index, rebuilt weekly by a GitHub Action from public sources — no server, no API keys
+    exposed in the browser. Coverage is technique-based: a rule appears because it detects an
+    ATT&amp;CK technique this malware is documented to use, not because it names the malware directly.
+  </p>
+
+  <div class="mhl-wrap">
+    <div class="mhl-searchbox">
+      <input type="text" id="mhlInput" class="mhl-input"
+             placeholder="Search malware or tool — e.g. Emotet, Cobalt Strike, Mimikatz..."
+             autocomplete="off" aria-label="Search malware or tool" aria-expanded="false" role="combobox">
+      <div id="mhlSuggest" class="mhl-suggest" role="listbox"></div>
+    </div>
+    <div id="mhlStatus" class="mhl-status">Type a name to search — the index loads on first use (~700KB, cached after).</div>
+    <div id="mhlResult"></div>
+  </div>
+
+  <div class="subhead" style="margin-top:0;">Coverage Backlog</div>
   <p class="intro">
     A slice of the ATT&amp;CK gap-analysis backlog I run to prioritize new detections —
     each entry ties a technique to the telemetry needed and how urgently it should ship.
@@ -387,6 +475,235 @@
       });
     });
   }
+
+  // ---------- Malware Hunt Lookup ----------
+  (function(){
+    const input = document.getElementById('mhlInput');
+    const suggestBox = document.getElementById('mhlSuggest');
+    const statusEl = document.getElementById('mhlStatus');
+    const resultEl = document.getElementById('mhlResult');
+    if(!input) return;
+
+    const TACTIC_ORDER = ['reconnaissance','resource-development','initial-access','execution',
+      'persistence','privilege-escalation','defense-evasion','credential-access','discovery',
+      'lateral-movement','collection','command-and-control','exfiltration','impact'];
+    const LEVELS = ['critical','high','medium','low','informational'];
+    const LEVEL_ORDER = {critical:0, high:1, medium:2, low:3, informational:4};
+    const PAGE = 30;
+
+    let dataPromise = null;
+    let mhlData = null;
+    let searchList = null;
+    let activeIndex = -1;
+    let currentMalware = null;
+    let activeLevels = new Set(LEVELS);
+    let visibleRuleCount = PAGE;
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function loadData(){
+      if(!dataPromise){
+        statusEl.textContent = 'Loading index...';
+        dataPromise = fetch('data/malware-index.json')
+          .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+          .then(json => {
+            mhlData = json;
+            searchList = mhlData.malware.map((m, i) => ({
+              idx: i,
+              haystack: (m.name + ' ' + m.aliases.join(' ')).toLowerCase()
+            }));
+            const gen = mhlData.generated_at ? new Date(mhlData.generated_at).toLocaleDateString() : '';
+            statusEl.textContent = `${mhlData.counts.malware} malware/tools · ${mhlData.counts.rules} Sigma rules indexed${gen ? ' · updated '+gen : ''}`;
+          })
+          .catch(err => {
+            statusEl.textContent = 'Could not load the index right now — try again shortly.';
+            dataPromise = null;
+            throw err;
+          });
+      }
+      return dataPromise;
+    }
+
+    function search(term){
+      term = term.trim().toLowerCase();
+      if(!term || !searchList) return [];
+      return searchList.filter(s => s.haystack.includes(term)).slice(0, 8);
+    }
+
+    function renderSuggestions(matches){
+      activeIndex = -1;
+      if(!matches.length){
+        suggestBox.classList.remove('open');
+        suggestBox.innerHTML = '';
+        input.setAttribute('aria-expanded','false');
+        return;
+      }
+      suggestBox.innerHTML = matches.map(m => {
+        const mal = mhlData.malware[m.idx];
+        const aliasPreview = mal.aliases.slice(1,4).join(', ');
+        return `<div class="mhl-suggest-item" role="option" data-idx="${m.idx}">
+          <span class="mhl-suggest-name">${escapeHtml(mal.name)}${aliasPreview ? ' <span class="mhl-suggest-alias">aka '+escapeHtml(aliasPreview)+'</span>' : ''}</span>
+          <span class="mhl-suggest-id">${escapeHtml(mal.attack_id)}</span>
+        </div>`;
+      }).join('');
+      suggestBox.classList.add('open');
+      input.setAttribute('aria-expanded','true');
+      suggestBox.querySelectorAll('.mhl-suggest-item').forEach(el => {
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          selectMalware(parseInt(el.dataset.idx, 10));
+        });
+      });
+    }
+
+    function selectMalware(idx){
+      currentMalware = mhlData.malware[idx];
+      input.value = currentMalware.name;
+      suggestBox.classList.remove('open');
+      activeLevels = new Set(LEVELS);
+      visibleRuleCount = PAGE;
+      renderResult();
+    }
+
+    function renderResult(){
+      const m = currentMalware;
+      if(!m){ resultEl.innerHTML = ''; return; }
+
+      const techs = m.technique_idx.map(i => mhlData.techniques[i]);
+      const byTactic = {};
+      techs.forEach(t => {
+        (t.tactics && t.tactics.length ? t.tactics : ['other']).forEach(tac => {
+          (byTactic[tac] = byTactic[tac] || []).push(t);
+        });
+      });
+      const tacticKeys = Object.keys(byTactic).sort((a,b) => {
+        const ai = TACTIC_ORDER.indexOf(a), bi = TACTIC_ORDER.indexOf(b);
+        return (ai<0?999:ai) - (bi<0?999:bi);
+      });
+
+      let allRules = m.rule_idx.map(i => mhlData.rules[i]);
+      allRules.sort((a,b) => (LEVEL_ORDER[a.level] ?? 9) - (LEVEL_ORDER[b.level] ?? 9) || a.title.localeCompare(b.title));
+      const filteredRules = allRules.filter(r => activeLevels.has(r.level));
+      const shown = filteredRules.slice(0, visibleRuleCount);
+      const remaining = filteredRules.length - shown.length;
+
+      const malpediaBlock = m.malpedia ? `
+        <div class="mhl-section-label">Malpedia</div>
+        <p class="mhl-desc" style="margin-bottom:6px;">
+          Tracked as <a href="${m.malpedia.url}" target="_blank" rel="noopener">${escapeHtml(m.malpedia.id)}</a>${
+            m.malpedia.actors && m.malpedia.actors.length ? ' · attributed to ' + escapeHtml(m.malpedia.actors.join(', ')) : ''
+          }
+        </p>` : '';
+
+      resultEl.innerHTML = `
+        <div class="mhl-panel">
+          <div class="mhl-head">
+            <h3>${escapeHtml(m.name)}</h3>
+            <span class="mhl-attackid"><a href="${m.url}" target="_blank" rel="noopener" style="color:inherit;">${escapeHtml(m.attack_id)}</a></span>
+            <span class="mhl-kind">${escapeHtml(m.kind)}</span>
+          </div>
+          ${m.aliases.length > 1 ? `<div class="mhl-aliases">aka ${escapeHtml(m.aliases.slice(1).join(', '))}</div>` : ''}
+          <p class="mhl-desc">${m.description ? escapeHtml(m.description) : 'No description available.'}</p>
+          ${malpediaBlock}
+          <div class="mhl-stats">
+            <div class="mhl-stat"><b>${techs.length}</b><span>ATT&amp;CK techniques</span></div>
+            <div class="mhl-stat"><b>${allRules.length}</b><span>Sigma rules matched</span></div>
+            <div class="mhl-stat"><b>${m.platforms.length}</b><span>Platforms</span></div>
+          </div>
+
+          <div class="mhl-section-label">Techniques used (by tactic)</div>
+          <div class="mhl-tactics">
+            ${tacticKeys.map(tac => `
+              <div class="mhl-tactic-row">
+                <span class="mhl-tactic-name">${escapeHtml(tac.replace(/-/g,' '))}</span>
+                ${byTactic[tac].map(t => `<a class="mhl-tech-chip" href="${t.url}" target="_blank" rel="noopener" title="${escapeHtml(t.name)}">${escapeHtml(t.id)}</a>`).join('')}
+              </div>`).join('')}
+          </div>
+
+          <div class="mhl-section-label">Hunting: matched Sigma rules</div>
+          <div class="mhl-rule-controls">
+            ${LEVELS.map(lv => `<button type="button" class="mhl-level-btn ${activeLevels.has(lv)?'active':''}" data-level="${lv}">${lv}</button>`).join('')}
+          </div>
+          ${filteredRules.length ? `
+          <div class="mhl-rules">
+            ${shown.map(r => `
+              <div class="mhl-rule">
+                <div class="mhl-rule-main">
+                  <div class="mhl-rule-title">${escapeHtml(r.title)}</div>
+                  <div class="mhl-rule-meta">${escapeHtml([r.logsource.category, r.logsource.product, r.logsource.service].filter(Boolean).join(' / ')) || 'sigma rule'}${r.status ? ' · '+escapeHtml(r.status) : ''}</div>
+                </div>
+                <span class="mhl-level ${r.level}">${escapeHtml(r.level)}</span>
+                <div class="mhl-rule-links">
+                  ${r.detection_fyi_url ? `<a href="${r.detection_fyi_url}" target="_blank" rel="noopener">detection.fyi</a>` : ''}
+                  <a href="${r.github_url}" target="_blank" rel="noopener">source</a>
+                </div>
+              </div>`).join('')}
+          </div>
+          ${remaining > 0 ? `<div class="mhl-more" id="mhlLoadMore">load ${Math.min(PAGE, remaining)} more (${remaining} left)</div>` : ''}
+          ` : `<div class="mhl-empty">No rules match the selected severity filter.</div>`}
+
+          <p class="mhl-source-note">Sources: MITRE ATT&amp;CK · SigmaHQ/sigma${m.malpedia ? ' · Malpedia' : ''} — coverage is best-effort and technique-based, not a guarantee of detection.</p>
+        </div>
+      `;
+
+      resultEl.querySelectorAll('.mhl-level-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lv = btn.dataset.level;
+          if(activeLevels.has(lv)){
+            if(activeLevels.size > 1) activeLevels.delete(lv);
+          } else {
+            activeLevels.add(lv);
+          }
+          visibleRuleCount = PAGE;
+          renderResult();
+        });
+      });
+      const loadMoreBtn = document.getElementById('mhlLoadMore');
+      if(loadMoreBtn){
+        loadMoreBtn.addEventListener('click', () => {
+          visibleRuleCount += PAGE;
+          renderResult();
+        });
+      }
+    }
+
+    function updateActiveSuggestion(items){
+      items.forEach(el => el.classList.remove('active'));
+      if(items[activeIndex]){
+        items[activeIndex].classList.add('active');
+        items[activeIndex].scrollIntoView({block:'nearest'});
+      }
+    }
+
+    let debounceTimer = null;
+    input.addEventListener('focus', () => { loadData().catch(() => {}); });
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const val = input.value;
+      debounceTimer = setTimeout(() => {
+        loadData().then(() => renderSuggestions(search(val))).catch(() => {});
+      }, 120);
+    });
+    input.addEventListener('keydown', (e) => {
+      const items = suggestBox.querySelectorAll('.mhl-suggest-item');
+      if(!items.length) return;
+      if(e.key === 'ArrowDown'){ e.preventDefault(); activeIndex = Math.min(activeIndex+1, items.length-1); updateActiveSuggestion(items); }
+      else if(e.key === 'ArrowUp'){ e.preventDefault(); activeIndex = Math.max(activeIndex-1, 0); updateActiveSuggestion(items); }
+      else if(e.key === 'Enter'){
+        if(activeIndex >= 0 && items[activeIndex]){
+          e.preventDefault();
+          selectMalware(parseInt(items[activeIndex].dataset.idx, 10));
+        }
+      } else if(e.key === 'Escape'){
+        suggestBox.classList.remove('open');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if(!e.target.closest('.mhl-searchbox')) suggestBox.classList.remove('open');
+    });
+  })();
 </script>
 
 </body>
