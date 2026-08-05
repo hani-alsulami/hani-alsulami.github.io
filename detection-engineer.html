@@ -79,23 +79,6 @@
 
   .subhead{ font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600; margin-bottom:16px; margin-top:70px; }
 
-  .uc-grid{
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:1px;
-    background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;
-  }
-  @media (max-width:760px){ .uc-grid{ grid-template-columns:1fr; } }
-  .uc-card{ background:var(--bg-panel); padding:22px 24px; }
-  .uc-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
-  .uc-tactic{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-faint); letter-spacing:0.5px; text-transform:uppercase; }
-  .uc-priority{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; padding:2px 8px; border-radius:3px; white-space:nowrap; }
-  .uc-priority.critical{ background:rgba(229,72,77,0.14); color:var(--red); border:1px solid rgba(229,72,77,0.35); }
-  .uc-priority.high{ background:rgba(53,199,214,0.1); color:var(--amber); border:1px solid rgba(53,199,214,0.3); }
-  .uc-priority.medium{ background:rgba(118,144,160,0.12); color:var(--text-dim); border:1px solid var(--line); }
-  .uc-card h3{ font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600; margin-bottom:4px; }
-  .uc-tid{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-faint); margin-bottom:10px; }
-  .uc-card p{ font-size:13px; color:var(--text-dim); margin-bottom:0; }
-  .uc-card p b{ color:var(--text-faint); font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; margin-right:6px; font-weight:400; }
-
   .mhl-wrap{ margin-bottom:70px; }
   .mhl-searchbox{ position:relative; margin-bottom:10px; }
   .mhl-input{
@@ -156,6 +139,37 @@
   .mhl-more:hover{ color:var(--amber); }
   .mhl-empty{ color:var(--text-faint); font-size:13px; padding:20px 0; }
   .mhl-source-note{ font-size:11.5px; color:var(--text-faint); margin-top:18px; }
+
+  .matrix-summary{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .matrix-scroll{
+    overflow:auto; max-height:600px; border:1px solid var(--line); border-radius:8px; background:var(--line);
+    margin-bottom:16px;
+  }
+  .matrix-grid{ display:flex; gap:1px; min-width:max-content; }
+  .matrix-col{ background:var(--bg-panel); min-width:158px; display:flex; flex-direction:column; }
+  .matrix-col-head{
+    padding:10px 10px 8px; font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase;
+    letter-spacing:.5px; color:var(--text-faint); border-bottom:1px solid var(--line);
+    position:sticky; top:0; background:var(--bg-panel); z-index:1;
+  }
+  .matrix-col-head b{ color:var(--text-dim); font-weight:600; }
+  .matrix-cell{
+    padding:6px 10px; border-bottom:1px solid var(--line); font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    cursor:pointer; display:flex; justify-content:space-between; gap:6px; align-items:center; transition:filter .15s;
+  }
+  .matrix-cell:hover{ filter:brightness(1.35); }
+  .matrix-cell .n{ font-size:9.5px; opacity:.75; }
+  .matrix-cell.cov-0{ background:rgba(229,72,77,0.10); color:var(--red); }
+  .matrix-cell.cov-1{ background:rgba(118,144,160,0.10); color:var(--text-dim); }
+  .matrix-cell.cov-2{ background:rgba(53,199,214,0.14); color:var(--amber); }
+  .matrix-cell.cov-3{ background:rgba(62,207,142,0.16); color:var(--green); }
+  .matrix-legend{ display:flex; gap:18px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); }
+  .matrix-legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .matrix-legend i{ width:11px; height:11px; border-radius:2px; display:inline-block; }
+  .matrix-legend .cov-0 i{ background:var(--red); }
+  .matrix-legend .cov-1 i{ background:var(--text-faint); }
+  .matrix-legend .cov-2 i{ background:var(--amber); }
+  .matrix-legend .cov-3 i{ background:var(--green); }
 
   .back-link{
     display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:13px;
@@ -226,106 +240,27 @@
              autocomplete="off" aria-label="Search malware or tool" aria-expanded="false" role="combobox">
       <div id="mhlSuggest" class="mhl-suggest" role="listbox"></div>
     </div>
-    <div id="mhlStatus" class="mhl-status">Type a name to search — the index loads on first use (~700KB, cached after).</div>
+    <div id="mhlStatus" class="mhl-status">Loading index (~700KB, cached after)...</div>
     <div id="mhlResult"></div>
   </div>
 
-  <div class="subhead" style="margin-top:0;">Coverage Backlog</div>
+
+  <div class="subhead">ATT&amp;CK Coverage Map</div>
   <p class="intro">
-    A slice of the ATT&amp;CK gap-analysis backlog I run to prioritize new detections —
-    each entry ties a technique to the telemetry needed and how urgently it should ship.
+    Every technique across the whole indexed library, aggregated — not one malware, all 812.
+    Each cell is a technique; color is how many Sigma rules in the index detect it. Red cells
+    are gaps: techniques in active use by tracked malware with zero matching rules today.
   </p>
-  <p class="note">
-    Priorities and data-source requirements are generalized from real backlog work;
-    specific rule names and environment details are intentionally left out.
-  </p>
-
-  <div class="uc-grid">
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Execution</span><span class="uc-priority critical">Critical</span></div>
-      <h3>ClickFix-style copy/paste execution</h3>
-      <div class="uc-tid">T1204.004</div>
-      <p><b>Data needed</b>EDR process + PowerShell script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Lateral Movement</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Internal spearphishing detection</h3>
-      <div class="uc-tid">T1534</div>
-      <p><b>Data needed</b>Mail flow trace, mailbox audit logs, identity sign-in logs</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Collection</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Suspicious screen-capture activity</h3>
-      <div class="uc-tid">T1113</div>
-      <p><b>Data needed</b>EDR process, file-creation &amp; script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Command &amp; Control</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Web-based C2 over normal ports</h3>
-      <div class="uc-tid">T1071.001</div>
-      <p><b>Data needed</b>Proxy logs</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Command &amp; Control</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Unauthorized remote-desktop software</h3>
-      <div class="uc-tid">T1219.002</div>
-      <p><b>Data needed</b>Software inventory, process + service telemetry, network connections</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Exfiltration</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Exfiltration over C2 channel</h3>
-      <div class="uc-tid">T1041</div>
-      <p><b>Data needed</b>DLP policy match alerts, proxy logs with upload volume</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Credential Access</span><span class="uc-priority high">High</span></div>
-      <h3>LSA secrets dumping</h3>
-      <div class="uc-tid">T1003.004</div>
-      <p><b>Data needed</b>Process telemetry + sensitive registry hive access</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Credential Access</span><span class="uc-priority high">High</span></div>
-      <h3>Browser-stored credential theft</h3>
-      <div class="uc-tid">T1555.003</div>
-      <p><b>Data needed</b>Browser credential-store access + file telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Privilege Escalation</span><span class="uc-priority high">High</span></div>
-      <h3>UAC bypass attempts</h3>
-      <div class="uc-tid">T1548.002</div>
-      <p><b>Data needed</b>Process + registry modification telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Stealth</span><span class="uc-priority high">High</span></div>
-      <h3>Obfuscated command execution</h3>
-      <div class="uc-tid">T1027.010</div>
-      <p><b>Data needed</b>Process + PowerShell script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Persistence</span><span class="uc-priority high">High</span></div>
-      <h3>Office template macro persistence</h3>
-      <div class="uc-tid">T1137.001</div>
-      <p><b>Data needed</b>File creation/modification + process telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Discovery</span><span class="uc-priority medium">Medium</span></div>
-      <h3>Security software discovery</h3>
-      <div class="uc-tid">T1518.001</div>
-      <p><b>Data needed</b>Process + PowerShell script telemetry</p>
-    </div>
-
+  <div id="matrixStatus" class="mhl-status">Loading coverage map...</div>
+  <div class="matrix-summary" id="matrixSummary"></div>
+  <div class="matrix-scroll">
+    <div class="matrix-grid" id="matrixGrid"></div>
+  </div>
+  <div class="matrix-legend">
+    <span class="cov-0"><i></i>0 rules — gap</span>
+    <span class="cov-1"><i></i>1–2 rules — thin</span>
+    <span class="cov-2"><i></i>3–9 rules — covered</span>
+    <span class="cov-3"><i></i>10+ rules — strong</span>
   </div>
 
   <a class="back-link" href="index.html">&larr; back to profile</a>
@@ -364,11 +299,15 @@
     if(!input) return;
 
     const TACTIC_ORDER = ['reconnaissance','resource-development','initial-access','execution',
-      'persistence','privilege-escalation','defense-evasion','credential-access','discovery',
-      'lateral-movement','collection','command-and-control','exfiltration','impact'];
+      'persistence','privilege-escalation','stealth','defense-impairment','credential-access',
+      'discovery','lateral-movement','collection','command-and-control','exfiltration','impact'];
     const LEVELS = ['critical','high','medium','low','informational'];
     const LEVEL_ORDER = {critical:0, high:1, medium:2, low:3, informational:4};
     const PAGE = 30;
+
+    const matrixStatusEl = document.getElementById('matrixStatus');
+    const matrixSummaryEl = document.getElementById('matrixSummary');
+    const matrixGridEl = document.getElementById('matrixGrid');
 
     let dataPromise = null;
     let mhlData = null;
@@ -395,14 +334,76 @@
             }));
             const gen = mhlData.generated_at ? new Date(mhlData.generated_at).toLocaleDateString() : '';
             statusEl.textContent = `${mhlData.counts.malware} malware/tools · ${mhlData.counts.rules} Sigma rules indexed${gen ? ' · updated '+gen : ''}`;
+            renderMatrix();
           })
           .catch(err => {
             statusEl.textContent = 'Could not load the index right now — try again shortly.';
+            if(matrixStatusEl) matrixStatusEl.textContent = 'Could not load the coverage map right now — try again shortly.';
             dataPromise = null;
             throw err;
           });
       }
       return dataPromise;
+    }
+
+    function renderMatrix(){
+      if(!matrixGridEl || !mhlData) return;
+
+      const n = mhlData.techniques.length;
+      const ruleCounts = new Array(n).fill(0);
+      mhlData.rules.forEach(r => r.technique_idx.forEach(i => ruleCounts[i]++));
+      const malwareCounts = new Array(n).fill(0);
+      mhlData.malware.forEach(m => m.technique_idx.forEach(i => malwareCounts[i]++));
+
+      function covLevel(c){
+        if(c === 0) return 0;
+        if(c <= 2) return 1;
+        if(c <= 9) return 2;
+        return 3;
+      }
+
+      const byTactic = {};
+      mhlData.techniques.forEach((t, i) => {
+        (t.tactics && t.tactics.length ? t.tactics : ['other']).forEach(tac => {
+          (byTactic[tac] = byTactic[tac] || []).push(i);
+        });
+      });
+      const tacticKeys = Object.keys(byTactic).sort((a,b) => {
+        const ai = TACTIC_ORDER.indexOf(a), bi = TACTIC_ORDER.indexOf(b);
+        return (ai<0?999:ai) - (bi<0?999:bi);
+      });
+      tacticKeys.forEach(tac => {
+        byTactic[tac].sort((a,b) => ruleCounts[a] - ruleCounts[b] || mhlData.techniques[a].id.localeCompare(mhlData.techniques[b].id));
+      });
+
+      const gaps = ruleCounts.filter(c => c === 0).length;
+      const totalRules = mhlData.rules.length;
+      if(matrixSummaryEl){
+        matrixSummaryEl.innerHTML = `
+          <div class="mhl-stat"><b>${n}</b><span>Techniques mapped</span></div>
+          <div class="mhl-stat"><b>${totalRules}</b><span>Sigma rules</span></div>
+          <div class="mhl-stat"><b>${gaps}</b><span>Zero-rule gaps</span></div>
+          <div class="mhl-stat"><b>${mhlData.counts.malware}</b><span>Malware/tools indexed</span></div>
+        `;
+      }
+
+      matrixGridEl.innerHTML = tacticKeys.map(tac => `
+        <div class="matrix-col">
+          <div class="matrix-col-head">${escapeHtml(tac.replace(/-/g,' '))} <b>${byTactic[tac].length}</b></div>
+          ${byTactic[tac].map(i => {
+            const t = mhlData.techniques[i];
+            const lvl = covLevel(ruleCounts[i]);
+            return `<a class="matrix-cell cov-${lvl}" href="${t.url}" target="_blank" rel="noopener"
+                       title="${escapeHtml(t.name)} — ${ruleCounts[i]} rule(s), used by ${malwareCounts[i]} malware/tool(s)">
+                      <span>${escapeHtml(t.id)}</span><span class="n">${ruleCounts[i]}</span>
+                    </a>`;
+          }).join('')}
+        </div>
+      `).join('');
+
+      if(matrixStatusEl){
+        matrixStatusEl.textContent = `${n} techniques · ${totalRules} rules · ${gaps} gaps with zero rule coverage`;
+      }
     }
 
     function search(term){
@@ -582,6 +583,8 @@
     document.addEventListener('click', (e) => {
       if(!e.target.closest('.mhl-searchbox')) suggestBox.classList.remove('open');
     });
+
+    loadData().catch(() => {});
   })();
 </script>
 
