@@ -79,23 +79,6 @@
 
   .subhead{ font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600; margin-bottom:16px; margin-top:70px; }
 
-  .uc-grid{
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:1px;
-    background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;
-  }
-  @media (max-width:760px){ .uc-grid{ grid-template-columns:1fr; } }
-  .uc-card{ background:var(--bg-panel); padding:22px 24px; }
-  .uc-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
-  .uc-tactic{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--text-faint); letter-spacing:0.5px; text-transform:uppercase; }
-  .uc-priority{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; padding:2px 8px; border-radius:3px; white-space:nowrap; }
-  .uc-priority.critical{ background:rgba(229,72,77,0.14); color:var(--red); border:1px solid rgba(229,72,77,0.35); }
-  .uc-priority.high{ background:rgba(53,199,214,0.1); color:var(--amber); border:1px solid rgba(53,199,214,0.3); }
-  .uc-priority.medium{ background:rgba(118,144,160,0.12); color:var(--text-dim); border:1px solid var(--line); }
-  .uc-card h3{ font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600; margin-bottom:4px; }
-  .uc-tid{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-faint); margin-bottom:10px; }
-  .uc-card p{ font-size:13px; color:var(--text-dim); margin-bottom:0; }
-  .uc-card p b{ color:var(--text-faint); font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; margin-right:6px; font-weight:400; }
-
   .mhl-wrap{ margin-bottom:70px; }
   .mhl-searchbox{ position:relative; margin-bottom:10px; }
   .mhl-input{
@@ -261,103 +244,6 @@
     <div id="mhlResult"></div>
   </div>
 
-  <div class="subhead" style="margin-top:0;">Coverage Backlog</div>
-  <p class="intro">
-    A slice of the ATT&amp;CK gap-analysis backlog I run to prioritize new detections —
-    each entry ties a technique to the telemetry needed and how urgently it should ship.
-  </p>
-  <p class="note">
-    Priorities and data-source requirements are generalized from real backlog work;
-    specific rule names and environment details are intentionally left out.
-  </p>
-
-  <div class="uc-grid">
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Execution</span><span class="uc-priority critical">Critical</span></div>
-      <h3>ClickFix-style copy/paste execution</h3>
-      <div class="uc-tid">T1204.004</div>
-      <p><b>Data needed</b>EDR process + PowerShell script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Lateral Movement</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Internal spearphishing detection</h3>
-      <div class="uc-tid">T1534</div>
-      <p><b>Data needed</b>Mail flow trace, mailbox audit logs, identity sign-in logs</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Collection</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Suspicious screen-capture activity</h3>
-      <div class="uc-tid">T1113</div>
-      <p><b>Data needed</b>EDR process, file-creation &amp; script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Command &amp; Control</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Web-based C2 over normal ports</h3>
-      <div class="uc-tid">T1071.001</div>
-      <p><b>Data needed</b>Proxy logs</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Command &amp; Control</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Unauthorized remote-desktop software</h3>
-      <div class="uc-tid">T1219.002</div>
-      <p><b>Data needed</b>Software inventory, process + service telemetry, network connections</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Exfiltration</span><span class="uc-priority critical">Critical</span></div>
-      <h3>Exfiltration over C2 channel</h3>
-      <div class="uc-tid">T1041</div>
-      <p><b>Data needed</b>DLP policy match alerts, proxy logs with upload volume</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Credential Access</span><span class="uc-priority high">High</span></div>
-      <h3>LSA secrets dumping</h3>
-      <div class="uc-tid">T1003.004</div>
-      <p><b>Data needed</b>Process telemetry + sensitive registry hive access</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Credential Access</span><span class="uc-priority high">High</span></div>
-      <h3>Browser-stored credential theft</h3>
-      <div class="uc-tid">T1555.003</div>
-      <p><b>Data needed</b>Browser credential-store access + file telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Privilege Escalation</span><span class="uc-priority high">High</span></div>
-      <h3>UAC bypass attempts</h3>
-      <div class="uc-tid">T1548.002</div>
-      <p><b>Data needed</b>Process + registry modification telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Stealth</span><span class="uc-priority high">High</span></div>
-      <h3>Obfuscated command execution</h3>
-      <div class="uc-tid">T1027.010</div>
-      <p><b>Data needed</b>Process + PowerShell script telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Persistence</span><span class="uc-priority high">High</span></div>
-      <h3>Office template macro persistence</h3>
-      <div class="uc-tid">T1137.001</div>
-      <p><b>Data needed</b>File creation/modification + process telemetry</p>
-    </div>
-
-    <div class="uc-card" data-reveal>
-      <div class="uc-top"><span class="uc-tactic">Discovery</span><span class="uc-priority medium">Medium</span></div>
-      <h3>Security software discovery</h3>
-      <div class="uc-tid">T1518.001</div>
-      <p><b>Data needed</b>Process + PowerShell script telemetry</p>
-    </div>
-
-  </div>
 
   <div class="subhead">ATT&amp;CK Coverage Map</div>
   <p class="intro">
