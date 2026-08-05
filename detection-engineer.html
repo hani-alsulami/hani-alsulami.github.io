@@ -140,6 +140,16 @@
   .mhl-empty{ color:var(--text-faint); font-size:13px; padding:20px 0; }
   .mhl-source-note{ font-size:11.5px; color:var(--text-faint); margin-top:18px; }
 
+  .matrix-scope{
+    display:inline-flex; align-items:center; gap:10px; font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:var(--amber); background:rgba(53,199,214,0.08); border:1px solid var(--amber-dim); border-radius:5px;
+    padding:8px 12px; margin-bottom:14px;
+  }
+  .matrix-scope button{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-dim); background:none;
+    border:1px solid var(--line); border-radius:3px; padding:3px 9px; cursor:pointer;
+  }
+  .matrix-scope button:hover{ color:var(--amber); border-color:var(--amber-dim); }
   .matrix-summary{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
   .matrix-scroll{
     overflow:auto; max-height:600px; border:1px solid var(--line); border-radius:8px; background:var(--line);
@@ -245,13 +255,14 @@
   </div>
 
 
-  <div class="subhead">ATT&amp;CK Coverage Map</div>
-  <p class="intro">
+  <div class="subhead" id="matrixTitle">ATT&amp;CK Coverage Map</div>
+  <p class="intro" id="matrixIntro">
     Every technique across the whole indexed library, aggregated — not one malware, all 812.
     Each cell is a technique; color is how many Sigma rules in the index detect it. Red cells
     are gaps: techniques in active use by tracked malware with zero matching rules today.
   </p>
   <div id="matrixStatus" class="mhl-status">Loading coverage map...</div>
+  <div id="matrixScopeBar"></div>
   <div class="matrix-summary" id="matrixSummary"></div>
   <div class="matrix-scroll">
     <div class="matrix-grid" id="matrixGrid"></div>
@@ -308,6 +319,9 @@
     const matrixStatusEl = document.getElementById('matrixStatus');
     const matrixSummaryEl = document.getElementById('matrixSummary');
     const matrixGridEl = document.getElementById('matrixGrid');
+    const matrixTitleEl = document.getElementById('matrixTitle');
+    const matrixIntroEl = document.getElementById('matrixIntro');
+    const matrixScopeBarEl = document.getElementById('matrixScopeBar');
 
     let dataPromise = null;
     let mhlData = null;
@@ -346,14 +360,32 @@
       return dataPromise;
     }
 
+    function clearMatrixScope(){
+      currentMalware = null;
+      input.value = '';
+      resultEl.innerHTML = '';
+      renderMatrix();
+    }
+
     function renderMatrix(){
       if(!matrixGridEl || !mhlData) return;
 
-      const n = mhlData.techniques.length;
-      const ruleCounts = new Array(n).fill(0);
-      mhlData.rules.forEach(r => r.technique_idx.forEach(i => ruleCounts[i]++));
-      const malwareCounts = new Array(n).fill(0);
-      mhlData.malware.forEach(m => m.technique_idx.forEach(i => malwareCounts[i]++));
+      const scoped = currentMalware;
+      const techIndices = scoped ? scoped.technique_idx : mhlData.techniques.map((_, i) => i);
+
+      const ruleCounts = {};
+      techIndices.forEach(i => { ruleCounts[i] = 0; });
+      const malwareCounts = {};
+      techIndices.forEach(i => { malwareCounts[i] = 0; });
+
+      if(scoped){
+        scoped.rule_idx.forEach(ridx => {
+          mhlData.rules[ridx].technique_idx.forEach(i => { if(i in ruleCounts) ruleCounts[i]++; });
+        });
+      } else {
+        mhlData.rules.forEach(r => r.technique_idx.forEach(i => { if(i in ruleCounts) ruleCounts[i]++; }));
+        mhlData.malware.forEach(m => m.technique_idx.forEach(i => { if(i in malwareCounts) malwareCounts[i]++; }));
+      }
 
       function covLevel(c){
         if(c === 0) return 0;
@@ -363,7 +395,8 @@
       }
 
       const byTactic = {};
-      mhlData.techniques.forEach((t, i) => {
+      techIndices.forEach(i => {
+        const t = mhlData.techniques[i];
         (t.tactics && t.tactics.length ? t.tactics : ['other']).forEach(tac => {
           (byTactic[tac] = byTactic[tac] || []).push(i);
         });
@@ -376,11 +409,30 @@
         byTactic[tac].sort((a,b) => ruleCounts[a] - ruleCounts[b] || mhlData.techniques[a].id.localeCompare(mhlData.techniques[b].id));
       });
 
-      const gaps = ruleCounts.filter(c => c === 0).length;
-      const totalRules = mhlData.rules.length;
+      const gaps = techIndices.filter(i => ruleCounts[i] === 0).length;
+      const totalRules = scoped ? scoped.rule_idx.length : mhlData.rules.length;
+
+      if(matrixTitleEl) matrixTitleEl.textContent = scoped ? `ATT&CK Coverage Map — ${scoped.name}` : 'ATT&CK Coverage Map';
+      if(matrixIntroEl){
+        matrixIntroEl.textContent = scoped
+          ? `Just this malware: ${techIndices.length} techniques it's documented to use, colored by how many of its own ${totalRules} matched Sigma rules cover each one. Red cells are gaps in this specific malware's coverage.`
+          : 'Every technique across the whole indexed library, aggregated — not one malware, all ' + mhlData.counts.malware + '. Each cell is a technique; color is how many Sigma rules in the index detect it. Red cells are gaps: techniques in active use by tracked malware with zero matching rules today.';
+      }
+      if(matrixScopeBarEl){
+        matrixScopeBarEl.innerHTML = scoped
+          ? `<div class="matrix-scope">Showing: <b>${escapeHtml(scoped.name)}</b> only <button type="button" id="matrixClearBtn">&larr; back to full library map</button></div>`
+          : '';
+        const clearBtn = document.getElementById('matrixClearBtn');
+        if(clearBtn) clearBtn.addEventListener('click', clearMatrixScope);
+      }
+
       if(matrixSummaryEl){
-        matrixSummaryEl.innerHTML = `
-          <div class="mhl-stat"><b>${n}</b><span>Techniques mapped</span></div>
+        matrixSummaryEl.innerHTML = scoped ? `
+          <div class="mhl-stat"><b>${techIndices.length}</b><span>Techniques used</span></div>
+          <div class="mhl-stat"><b>${totalRules}</b><span>Sigma rules matched</span></div>
+          <div class="mhl-stat"><b>${gaps}</b><span>Zero-rule gaps</span></div>
+        ` : `
+          <div class="mhl-stat"><b>${techIndices.length}</b><span>Techniques mapped</span></div>
           <div class="mhl-stat"><b>${totalRules}</b><span>Sigma rules</span></div>
           <div class="mhl-stat"><b>${gaps}</b><span>Zero-rule gaps</span></div>
           <div class="mhl-stat"><b>${mhlData.counts.malware}</b><span>Malware/tools indexed</span></div>
@@ -393,8 +445,9 @@
           ${byTactic[tac].map(i => {
             const t = mhlData.techniques[i];
             const lvl = covLevel(ruleCounts[i]);
+            const extra = scoped ? '' : `, used by ${malwareCounts[i]} malware/tool(s)`;
             return `<a class="matrix-cell cov-${lvl}" href="${t.url}" target="_blank" rel="noopener"
-                       title="${escapeHtml(t.name)} — ${ruleCounts[i]} rule(s), used by ${malwareCounts[i]} malware/tool(s)">
+                       title="${escapeHtml(t.name)} — ${ruleCounts[i]} rule(s)${extra}">
                       <span>${escapeHtml(t.id)}</span><span class="n">${ruleCounts[i]}</span>
                     </a>`;
           }).join('')}
@@ -402,7 +455,9 @@
       `).join('');
 
       if(matrixStatusEl){
-        matrixStatusEl.textContent = `${n} techniques · ${totalRules} rules · ${gaps} gaps with zero rule coverage`;
+        matrixStatusEl.textContent = scoped
+          ? `${scoped.name}: ${techIndices.length} techniques · ${totalRules} rules · ${gaps} gaps`
+          : `${techIndices.length} techniques · ${totalRules} rules · ${gaps} gaps with zero rule coverage`;
       }
     }
 
@@ -445,6 +500,7 @@
       activeLevels = new Set(LEVELS);
       visibleRuleCount = PAGE;
       renderResult();
+      renderMatrix();
     }
 
     function renderResult(){
