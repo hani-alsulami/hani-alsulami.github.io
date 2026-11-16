@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>جوال أفراح</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#fff;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+#phone{position:relative;width:100%;height:100%;overflow:hidden;background:#000}
+@media (min-width:600px){
+  #phone{width:390px;height:844px;max-height:96vh;border-radius:54px;border:12px solid #1c1c1e;box-shadow:0 0 0 2px #333,0 30px 80px rgba(0,0,0,.6)}
+  body{background:radial-gradient(circle at 50% 30%,#2a1f2e,#000)}
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .32s;background:#000}
+.screen.hidden{transform:translateX(-100%);opacity:0;pointer-events:none}
+.screen.under{transform:translateX(25%);opacity:.4;pointer-events:none}
+/* status bar */
+.status{height:calc(44px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 26px 0;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600;direction:ltr;flex-shrink:0;z-index:5}
+.status .icons{display:flex;gap:6px;align-items:center}
+.bat{width:25px;height:12px;border:1.5px solid currentColor;border-radius:3px;position:relative;opacity:.9}
+.bat::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:currentColor;border-radius:1px}
+.bat i{position:absolute;inset:1.5px;width:58%;background:currentColor;border-radius:1px}
+/* lock */
+#lock{background:linear-gradient(160deg,#3b2440 0%,#1a1022 45%,#0b0710 100%);justify-content:flex-start;align-items:center;cursor:pointer}
+#lock .date{margin-top:40px;font-size:18px;opacity:.85}
+#lock .time{font-size:88px;font-weight:600;letter-spacing:-2px;direction:ltr;line-height:1.05}
+.notifs{width:92%;margin-top:34px;display:flex;flex-direction:column;gap:8px}
+.notif{background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:20px;padding:12px 14px;display:flex;gap:10px;align-items:center;animation:pop .5s backwards}
+.notif .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.notif b{font-size:14px}.notif p{font-size:13px;opacity:.85}
+.notif small{margin-right:auto;font-size:11px;opacity:.6;align-self:flex-start}
+#lock .hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));font-size:14px;opacity:.7;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.25}}
+@keyframes pop{from{transform:translateY(-10px);opacity:0}}
+/* home */
+#home{background:linear-gradient(170deg,#4a2c4f 0%,#2a1730 40%,#120a16 100%)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 10px;padding:28px 20px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:12px;background:none;border:0;color:#fff;font-family:inherit}
+.app .icon{width:62px;height:62px;border-radius:15px;display:grid;place-items:center;font-size:30px;box-shadow:0 4px 12px rgba(0,0,0,.3);position:relative;transition:transform .15s}
+.app:active .icon{transform:scale(.9)}
+.badge{position:absolute;top:-6px;left:-6px;background:#ff3b30;color:#fff;font-size:12px;font-weight:700;min-width:22px;height:22px;border-radius:11px;display:grid;place-items:center;padding:0 5px}
+.widget{margin:10px 20px 0;padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.widget .t{font-size:13px;opacity:.7}.widget .v{font-size:22px;font-weight:700;margin-top:4px}
+.dock{margin-top:auto;margin:auto 12px calc(16px + env(safe-area-inset-bottom));padding:14px;border-radius:30px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;justify-content:space-around}
+.dock .app span{display:none}
+/* app chrome */
+.bar{display:flex;align-items:center;gap:10px;padding:6px 14px 10px;flex-shrink:0}
+.back{background:none;border:0;color:var(--accent,#0a84ff);font-size:17px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:2px;padding:4px}
+.bar h2{font-size:17px;font-weight:600;flex:1;text-align:center;margin-left:50px}
+.big{font-size:32px;font-weight:700;padding:4px 18px 10px}
+.list{flex:1;overflow-y:auto;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+.row{display:flex;align-items:center;gap:12px;padding:11px 18px;cursor:pointer;border-bottom:.5px solid #2a2a2c}
+.row:active{background:#1c1c1e}
+.av{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:700;flex-shrink:0}
+.row .mid{flex:1;min-width:0}
+.row .name{font-size:16px;font-weight:600}
+.row .sub{font-size:14px;color:#8e8e93;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .meta{font-size:12px;color:#8e8e93;text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.missed .name{color:#ff453a}
+.unread{background:#25d366;color:#000;font-size:12px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:grid;place-items:center;padding:0 5px}
+/* chat */
+#chat{background:#0b141a}
+#chat .bar{background:#1f2c34;padding-top:6px}
+#chat .bar h2{text-align:right;margin:0;font-size:16px}
+#chat .bar small{display:block;font-size:12px;color:#8696a0;font-weight:400}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:4px;
+  background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:18px 18px}
+.day{align-self:center;background:#1f2c34;color:#8696a0;font-size:12px;padding:5px 12px;border-radius:8px;margin:6px 0 10px}
+.bub{align-self:flex-start;max-width:78%;background:#1f2c34;padding:6px 10px 18px;border-radius:10px;border-top-right-radius:3px;font-size:15px;position:relative;min-width:80px;animation:pop .3s backwards}
+.bub.cont{border-top-right-radius:10px}
+.bub .who{font-size:13px;font-weight:600;margin-bottom:2px}
+.bub .tm{position:absolute;bottom:3px;left:8px;font-size:11px;color:#8696a0;direction:ltr}
+.inputbar{display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#0b141a}
+.inputbar div{flex:1;background:#1f2c34;border-radius:22px;padding:10px 16px;color:#8696a0;font-size:15px}
+.inputbar span{width:44px;height:44px;border-radius:50%;background:#00a884;display:grid;place-items:center;font-size:18px}
+/* calls */
+.tabs{display:flex;margin:0 18px 10px;background:#1c1c1e;border-radius:9px;padding:2px}
+.tabs button{flex:1;border:0;background:none;color:#fff;padding:6px;border-radius:7px;font-family:inherit;font-size:14px;cursor:pointer}
+.tabs button.on{background:#636366}
+/* notes */
+#notes{background:#000;--accent:#ffd60a}
+.note-card{margin:0 16px;background:#1c1c1e;border-radius:12px;overflow:hidden}
+#note{background:#000;--accent:#ffd60a}
+.note-body{padding:10px 22px;font-size:17px;line-height:1.9}
+.note-body h1{font-size:28px;margin-bottom:6px}
+.note-body .d{color:#8e8e93;font-size:13px;text-align:center;margin-bottom:16px}
+/* photos */
+#photos .locked{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:30px}
+.locked .lk{width:96px;height:96px;border-radius:50%;background:#1c1c1e;display:grid;place-items:center;font-size:44px}
+.locked h3{font-size:22px}.locked p{color:#8e8e93;font-size:15px}
+.blur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;margin-top:10px;filter:blur(14px);opacity:.6}
+.blur-grid i{aspect-ratio:1;display:block}
+/* voice */
+#voice{--accent:#ff453a}
+.player{margin:auto 20px calc(30px + env(safe-area-inset-bottom));background:#1c1c1e;border-radius:22px;padding:22px}
+.player .art{width:100%;aspect-ratio:1.6;border-radius:16px;background:linear-gradient(135deg,#ffcf6b,#ff7aa8 50%,#8e5cff);display:grid;place-items:center;font-size:64px;margin-bottom:16px}
+.player h3{font-size:20px}.player p{color:#8e8e93;font-size:14px}
+.prog{height:4px;background:#3a3a3c;border-radius:2px;margin:18px 0 6px;overflow:hidden;direction:ltr}
+.prog i{display:block;height:100%;width:0;background:#fff;transition:width .25s linear}
+.times{display:flex;justify-content:space-between;font-size:12px;color:#8e8e93;direction:ltr}
+.ctrls{display:flex;justify-content:center;gap:36px;align-items:center;margin-top:10px;direction:ltr}
+.ctrls button{background:none;border:0;color:#fff;font-size:26px;cursor:pointer}
+.ctrls .pp{width:64px;height:64px;border-radius:50%;background:#fff;color:#000;font-size:26px}
+.wave{display:flex;gap:3px;align-items:center;height:26px;justify-content:center;margin-top:10px}
+.wave b{width:3px;background:#ff7aa8;border-radius:2px;height:4px;transition:height .2s}
+/* alarm */
+#alarm{z-index:100;background:radial-gradient(circle at 50% 35%,#ff7a3d 0%,#b4234a 45%,#2a0b1a 100%);transform:none!important;transition:opacity .3s}
+#alarm.hidden{opacity:0}
+#alarm.ring{animation:shake .5s infinite}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px) rotate(-.4deg)}40%{transform:translateX(4px) rotate(.4deg)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.al-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.al-ic{font-size:70px;animation:ring .25s infinite alternate}
+@keyframes ring{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.al-lbl{font-size:16px;opacity:.8;margin-top:10px}
+.al-time{font-size:76px;font-weight:600;direction:ltr;line-height:1.1}
+.al-txt{font-size:38px;font-weight:700;margin-top:18px;animation:glow 1s infinite alternate;line-height:1.4}
+@keyframes glow{from{text-shadow:0 0 6px #fff6}to{text-shadow:0 0 26px #ffd60a;transform:scale(1.06)}}
+.al-btns{display:flex;gap:16px;margin-top:60px;width:100%;max-width:320px}
+.al-btns button{flex:1;padding:16px;border-radius:40px;border:0;font-family:inherit;font-size:18px;font-weight:700;cursor:pointer}
+#snooze{background:rgba(255,255,255,.22);color:#fff}
+#stopAl{background:#fff;color:#b4234a}
+/* home indicator */
+.homebar{position:absolute;bottom:calc(8px + env(safe-area-inset-bottom)*.3);left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#fff;opacity:.85;z-index:50;cursor:pointer;border:0}
+.homebar-hit{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:200px;height:28px;z-index:49;background:none;border:0;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="phone">
+
+  <!-- LOCK -->
+  <section class="screen" id="lock">
+    <div class="status" style="width:100%"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="date" id="lockDate"></div>
+    <div class="time clock"></div>
+    <div class="notifs">
+      <div class="notif" style="animation-delay:.3s"><div class="ic" style="background:#25d366">💬</div><div><b>البنات 💍</b><p>نوره: قرب العرررس</p></div><small>الآن</small></div>
+      <div class="notif" style="animation-delay:.6s"><div class="ic" style="background:#30d158">📞</div><div><b>مكالمة فائتة</b><p>جد عبيدالله (٢)</p></div><small>١٠ د</small></div>
+    </div>
+    <div class="hint">اضغط لفتح الجوال</div>
+  </section>
+
+  <!-- HOME -->
+  <section class="screen hidden" id="home">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="widget"><div class="t">📅 العد التنازلي</div><div class="v">الزواج ١٦-٦ 💍</div></div>
+    <div class="grid">
+      <button class="app" data-go="whatsapp"><div class="icon" style="background:#25d366">💬<span class="badge">٧</span></div><span>واتساب</span></button>
+      <button class="app" data-go="photos"><div class="icon" style="background:#fff">🌸</div><span>الصور</span></button>
+      <button class="app" data-go="notes"><div class="icon" style="background:linear-gradient(#ffd60a 30%,#fff 30%)">📝</div><span>الملاحظات</span></button>
+      <button class="app" data-go="voice"><div class="icon" style="background:#1c1c1e">🎙️</div><span>الصوتيات</span></button>
+    </div>
+    <div class="dock">
+      <button class="app" data-go="calls"><div class="icon" style="background:#30d158">📞<span class="badge">٣</span></div><span>الهاتف</span></button>
+      <button class="app" data-go="whatsapp"><div class="icon" style="background:#25d366">💬</div><span>واتساب</span></button>
+      <button class="app" data-go="photos"><div class="icon" style="background:#fff">🌸</div><span>الصور</span></button>
+      <button class="app" data-go="voice"><div class="icon" style="background:#1c1c1e">🎵</div><span>الصوتيات</span></button>
+    </div>
+  </section>
+
+  <!-- CALLS -->
+  <section class="screen hidden" id="calls">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ رجوع</button></div>
+    <div class="tabs"><button class="on" data-tab="all">الكل</button><button data-tab="missed">الفائتة</button></div>
+    <div class="big">الأخيرة</div>
+    <div class="list" id="callList"></div>
+  </section>
+
+  <!-- WHATSAPP -->
+  <section class="screen hidden" id="whatsapp" style="--accent:#25d366">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ رجوع</button></div>
+    <div class="big">الدردشات</div>
+    <div class="list" id="chatList"></div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="screen hidden" id="chat" style="--accent:#25d366">
+    <div class="status" style="background:#1f2c34"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹</button><div class="av" id="chatAv" style="width:38px;height:38px;font-size:16px"></div><h2 id="chatTitle"></h2></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="inputbar"><div>مراسلة</div><span>🎤</span></div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="screen hidden" id="notes">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ رجوع</button></div>
+    <div class="big">الملاحظات</div>
+    <div class="note-card"><div class="row" data-go="note" style="border:0"><div class="mid"><div class="name">الزواج 💍</div><div class="sub">١٦-٦ الزواج</div></div><div class="meta">أمس</div></div></div>
+  </section>
+
+  <section class="screen hidden" id="note">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ الملاحظات</button></div>
+    <div class="note-body">
+      <div class="d">أمس</div>
+      <h1>الزواج 💍</h1>
+      <p>١٦-٦ الزواج</p>
+    </div>
+  </section>
+
+  <!-- PHOTOS -->
+  <section class="screen hidden" id="photos">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ رجوع</button></div>
+    <div class="locked">
+      <div class="lk">🔒</div>
+      <h3>الصور مقفلة</h3>
+      <p>لإشعار آخر</p>
+      <div class="blur-grid" id="blurGrid"></div>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section class="screen hidden" id="voice">
+    <div class="status"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="bar"><button class="back" data-back>‹ رجوع</button></div>
+    <div class="big">الصوتيات</div>
+    <div class="list" style="flex:0">
+      <div class="row" style="cursor:default"><div class="av" style="background:#2c2c2e">🎵</div><div class="mid"><div class="name">يا شمس يا شموسة</div><div class="sub">أغنية العروسة 👰🏻‍♀️</div></div><div class="meta">٣:٤٥</div></div>
+    </div>
+    <div class="player">
+      <div class="art">☀️</div>
+      <h3>يا شمس يا شموسة</h3>
+      <p>أغنية العروسة</p>
+      <div class="wave" id="wave"></div>
+      <div class="prog"><i id="prog"></i></div>
+      <div class="times"><span id="cur">0:00</span><span>3:45</span></div>
+      <div class="ctrls"><button id="rw">⏮</button><button class="pp" id="pp">▶</button><button id="ff">⏭</button></div>
+    </div>
+  </section>
+
+  <!-- ALARM -->
+  <section class="screen hidden" id="alarm">
+    <div class="status" style="width:100%"><span class="clock"></span><span class="icons">📶 <span class="bat"><i></i></span></span></div>
+    <div class="al-wrap">
+      <div class="al-ic">⏰</div>
+      <div class="al-lbl">منبّه</div>
+      <div class="al-time clock"></div>
+      <div class="al-txt">قررررب العرس 💍</div>
+      <div class="al-btns">
+        <button id="snooze">غفوة</button>
+        <button id="stopAl">إيقاف</button>
+      </div>
+    </div>
+  </section>
+
+  <button class="homebar-hit" id="homeBtn" aria-label="الرئيسية"></button>
+  <div class="homebar" id="homeBar"></div>
+</div>
+
+<script>
+const AR = n => String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+
+/* clock */
+function tick(){
+  const d=new Date();
+  let h=d.getHours()%12||12, m=String(d.getMinutes()).padStart(2,'0');
+  document.querySelectorAll('.clock').forEach(e=>e.textContent=`${h}:${m}`);
+  try{document.getElementById('lockDate').textContent=d.toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long',day:'numeric',month:'long'});}catch(e){}
+}
+tick(); setInterval(tick,10000);
+
+/* navigation */
+let stack=['lock'];
+function show(id){
+  const cur=stack[stack.length-1];
+  if(cur===id) return;
+  document.getElementById(cur).classList.add('under');
+  const el=document.getElementById(id);
+  el.classList.remove('hidden','under');
+  stack.push(id);
+  updateHomebar();
+}
+function back(){
+  if(stack.length<=2) return;
+  const cur=stack.pop();
+  document.getElementById(cur).classList.add('hidden');
+  const prev=document.getElementById(stack[stack.length-1]);
+  prev.classList.remove('under');
+  updateHomebar();
+}
+function goHome(){
+  if(stack[0]==='lock' && stack.length===1) return;
+  while(stack.length>2){ document.getElementById(stack.pop()).classList.add('hidden'); }
+  document.getElementById('home').classList.remove('under','hidden');
+  updateHomebar();
+}
+function updateHomebar(){
+  const show=stack.length>1;
+  document.getElementById('homeBar').style.display=show?'block':'none';
+  document.getElementById('homeBtn').style.display=show?'block':'none';
+}
+updateHomebar();
+document.getElementById('lock').addEventListener('click',()=>{show('home');armAlarm(9000);});
+
+/* surprise alarm */
+let actx=null,beepT=null,alarmT=null,armed=false,alarmAudio=null,unlocked=false;
+/* build an alarm tone as a WAV file so it plays through the media channel (works with iPhone silent switch) */
+function makeAlarmWav(){
+  const sr=22050,dur=1.0,n=Math.floor(sr*dur),buf=new ArrayBuffer(44+n*2),v=new DataView(buf);
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  const beeps=[[0,.14,880],[.18,.32,1046],[.36,.50,880]];
+  for(let i=0;i<n;i++){
+    const t=i/sr;let s=0;
+    for(const [a,b,f] of beeps){ if(t>=a&&t<b){ const env=Math.min(1,(t-a)*80,(b-t)*80); s=(Math.sin(2*Math.PI*f*t)>0?1:-1)*0.45*env; } }
+    v.setInt16(44+i*2,s*32767,true);
+  }
+  return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
+}
+function unlockAudio(){
+  if(unlocked) return; unlocked=true;
+  try{
+    alarmAudio=new Audio(makeAlarmWav());alarmAudio.loop=true;alarmAudio.preload='auto';
+    alarmAudio.muted=true;
+    const p=alarmAudio.play(); if(p&&p.then) p.then(()=>{alarmAudio.pause();alarmAudio.currentTime=0;alarmAudio.muted=false;}).catch(()=>{alarmAudio.muted=false;});
+  }catch(e){}
+  try{ actx=new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }catch(e){}
+}
+function armAlarm(ms){
+  unlockAudio();
+  if(armed) return; armed=true;
+  alarmT=setTimeout(fireAlarm,ms);
+}
+function beep(){
+  if(!actx) return;
+  try{
+    const t=actx.currentTime;
+    [0,.18,.36].forEach(d=>{
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.type='square';o.frequency.value=d===.18?1046:880;
+      g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.18,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.15);
+      o.connect(g).connect(actx.destination);o.start(t+d);o.stop(t+d+.16);
+    });
+  }catch(e){}
+}
+function fireAlarm(){
+  armed=false;
+  const a=document.getElementById('alarm');
+  a.classList.remove('hidden');a.classList.add('ring');
+  try{navigator.vibrate&&navigator.vibrate([400,200,400,200,400]);}catch(e){}
+  let ok=false;
+  if(alarmAudio){ try{ alarmAudio.muted=false; alarmAudio.currentTime=0; const p=alarmAudio.play(); ok=true; if(p&&p.catch) p.catch(()=>{ beep();clearInterval(beepT);beepT=setInterval(beep,1000); }); }catch(e){ok=false;} }
+  if(!ok){ beep();clearInterval(beepT);beepT=setInterval(beep,1000); }
+}
+function stopAlarm(){
+  clearInterval(beepT);
+  if(alarmAudio){try{alarmAudio.pause();alarmAudio.currentTime=0;}catch(e){}}
+  const a=document.getElementById('alarm');a.classList.remove('ring');a.classList.add('hidden');
+}
+document.getElementById('stopAl').addEventListener('click',e=>{e.stopPropagation();stopAlarm();});
+document.getElementById('snooze').addEventListener('click',e=>{e.stopPropagation();stopAlarm();armAlarm(20000);});
+document.getElementById('homeBtn').addEventListener('click',goHome);
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){show(g.dataset.go);return;}
+  if(e.target.closest('[data-back]')) back();
+});
+
+/* calls */
+const calls=[
+  {n:'جد عبيدالله',t:'فائتة',time:'١٠:٤٢ م',missed:true,c:'#5e5ce6'},
+  {n:'جد عبيدالله',t:'فائتة',time:'١٠:٣٨ م',missed:true,c:'#5e5ce6'},
+  {n:'نوره',t:'واردة',time:'٩:١٥ م',missed:false,c:'#ff375f'},
+  {n:'مصلحه',t:'فائتة',time:'٨:٠٢ م',missed:true,c:'#ff9f0a'},
+  {n:'جد عبيدالله',t:'واردة',time:'٧:٣٠ م',missed:false,c:'#5e5ce6'},
+  {n:'مصلحه',t:'صادرة',time:'٥:١٠ م',missed:false,c:'#ff9f0a'},
+];
+function renderCalls(filter){
+  document.getElementById('callList').innerHTML=calls.filter(c=>filter!=='missed'||c.missed).map(c=>`
+    <div class="row ${c.missed?'missed':''}"><div class="av" style="background:${c.c}">${c.n[0]}</div>
+    <div class="mid"><div class="name">${c.n}</div><div class="sub">📱 ${c.t}</div></div>
+    <div class="meta">${c.time}<span style="color:#0a84ff;font-size:18px">ⓘ</span></div></div>`).join('');
+}
+renderCalls('all');
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderCalls(b.dataset.tab);
+}));
+
+/* whatsapp */
+const colors={'نوره':'#ff7aa8','زهره':'#ffd60a','حنين':'#64d2ff','موده':'#bf5af2','شادن':'#30d158'};
+const chats=[
+  {id:'g',name:'البنات 💍',av:'💍',avc:'#3a2a40',sub:'أنتِ، حنين، زهره، نوره، موده، شادن',time:'١١:٠٢ م',unread:6,group:true,msgs:[
+    ['نوره','قرب العرررس'],
+    ['زهره','واخيييرا احلى يوم'],
+    ['حنين','تكفون دخلوا سعود العرس'],
+    ['زهره','حتى انا عندي سعود 😭😭😭'],
+    ['موده','ماعليه كلهم اكيد بيدخلللون'],
+    ['شادن','حممماس'],
+  ]},
+  {id:'j',name:'جد عبيدالله',av:'ج',avc:'#5e5ce6',time:'١٠:٤٥ م',unread:1,msgs:[['','الوووو'],['','فصلتوا لي ثوب'],['','وبشت']]},
+  {id:'m',name:'مصلحه',av:'م',avc:'#ff9f0a',time:'٨:٠٥ م',msgs:[['','الووو'],['','افراح'],['','عزام بيروح الكامل'],['','تبين شي']]},
+  {id:'n',name:'نوره',av:'ن',avc:'#ff375f',time:'٧:٤٠ م',msgs:[['','فوفه'],['','بكرا جايه'],['','جده']]},
+];
+const baseMin=[22*60+50, 22*60+40, 20*60+1, 19*60+35];
+document.getElementById('chatList').innerHTML=chats.map(c=>{
+  const last=c.msgs[c.msgs.length-1];
+  return `<div class="row" data-chat="${c.id}"><div class="av" style="background:${c.avc}">${c.av}</div>
+  <div class="mid"><div class="name">${c.name}</div><div class="sub">${c.group?last[0]+': ':''}${last[1]}</div></div>
+  <div class="meta"><span style="${c.unread?'color:#25d366':''}">${c.time}</span>${c.unread?`<span class="unread">${AR(c.unread)}</span>`:''}</div></div>`;
+}).join('');
+function fmt(min){let h=Math.floor(min/60)%12||12,m=min%60;return AR(`${h}:${String(m).padStart(2,'0')}`)+' م';}
+document.getElementById('chatList').addEventListener('click',e=>{
+  const r=e.target.closest('[data-chat]'); if(!r) return;
+  const i=chats.findIndex(c=>c.id===r.dataset.chat), c=chats[i];
+  document.getElementById('chatTitle').innerHTML=`${c.name}${c.group?`<small>${c.sub}</small>`:'<small>آخر ظهور اليوم</small>'}`;
+  const av=document.getElementById('chatAv'); av.textContent=c.av; av.style.background=c.avc;
+  let prev=null, t=baseMin[i];
+  document.getElementById('msgs').innerHTML='<div class="day">اليوم</div>'+c.msgs.map(([who,txt],k)=>{
+    const cont=prev===who; prev=who; t+=1;
+    return `<div class="bub ${cont?'cont':''}" style="animation-delay:${k*.08}s;${cont?'':'margin-top:6px'}">
+      ${c.group&&!cont?`<div class="who" style="color:${colors[who]||'#25d366'}">${who}</div>`:''}
+      ${txt}<span class="tm">${fmt(t)}</span></div>`;
+  }).join('');
+  if(c.unread){c.unread=0;r.querySelector('.unread')?.remove();r.querySelector('.meta span').style.color='';}
+  show('chat');
+});
+
+/* photos blur */
+const pal=['#ffb3c7','#ffd6a5','#cdb4db','#a0c4ff','#fdffb6','#caffbf','#ffc6ff','#bdb2ff','#9bf6ff'];
+document.getElementById('blurGrid').innerHTML=pal.map(p=>`<i style="background:${p}"></i>`).join('');
+
+/* voice player (visual only) */
+const wave=document.getElementById('wave'); wave.innerHTML='<b></b>'.repeat(28);
+const bars=[...wave.children];
+let playing=false,pos=0,timer=null;const DUR=225;
+function drawP(){document.getElementById('prog').style.width=(pos/DUR*100)+'%';
+  document.getElementById('cur').textContent=`${Math.floor(pos/60)}:${String(pos%60).padStart(2,'0')}`;}
+function step(){pos++;if(pos>=DUR){pos=0;toggle();}drawP();bars.forEach(b=>b.style.height=(playing?4+Math.random()*22:4)+'px');}
+function toggle(){playing=!playing;document.getElementById('pp').textContent=playing?'❚❚':'▶';
+  clearInterval(timer);if(playing)timer=setInterval(step,1000);else bars.forEach(b=>b.style.height='4px');}
+document.getElementById('pp').addEventListener('click',toggle);
+document.getElementById('rw').addEventListener('click',()=>{pos=0;drawP();});
+document.getElementById('ff').addEventListener('click',()=>{pos=Math.min(DUR-1,pos+15);drawP();});
+</script>
+</body>
+</html>
