@@ -90,7 +90,7 @@
   nav ul{
     list-style:none;
     display:flex;
-    gap:34px;
+    gap:clamp(10px,1.8vw,34px);
   }
   nav a{
     font-family:'IBM Plex Mono', monospace;
@@ -133,7 +133,7 @@
     position:fixed; top:64px; left:0; right:0; z-index:99;
     background:rgba(6,10,16,0.97);
     border-bottom:1px solid var(--line);
-    max-height:0; overflow:hidden;
+    max-height:0; overflow:hidden; visibility:hidden;
     transition:max-height .3s ease;
   }
   .mobile-menu ul{ list-style:none; padding:8px 6vw 20px; }
@@ -144,9 +144,9 @@
   }
   .mobile-menu a::before{ content:"./"; color:var(--text-faint); }
   .mobile-menu a.active{ color:var(--amber); }
-  .mobile-menu.open{ max-height:420px; }
+  .mobile-menu.open{ max-height:calc(100vh - 64px); overflow-y:auto; visibility:visible; }
 
-  @media (max-width: 720px){
+  @media (max-width: 1020px){
     nav{ display:none; }
     .nav-toggle{ display:flex; }
   }
@@ -571,6 +571,7 @@
       <li><a href="#certs">certs</a></li>
       <li><a href="research.html">casework</a></li>
       <li><a href="articles/">articles</a></li>
+      <li><a href="saudi-cyber-regulation.html">NCA / SAMA</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
   </nav>
@@ -588,6 +589,7 @@
     <li><a href="#certs">certs</a></li>
     <li><a href="research.html">casework</a></li>
     <li><a href="articles/">articles</a></li>
+    <li><a href="saudi-cyber-regulation.html">NCA / SAMA</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
 </div>
