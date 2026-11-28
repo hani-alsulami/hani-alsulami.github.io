@@ -90,7 +90,7 @@
   nav ul{
     list-style:none;
     display:flex;
-    gap:34px;
+    gap:clamp(10px,1.8vw,34px);
   }
   nav a{
     font-family:'IBM Plex Mono', monospace;
@@ -133,7 +133,7 @@
     position:fixed; top:64px; left:0; right:0; z-index:99;
     background:rgba(6,10,16,0.97);
     border-bottom:1px solid var(--line);
-    max-height:0; overflow:hidden;
+    max-height:0; overflow:hidden; visibility:hidden;
     transition:max-height .3s ease;
   }
   .mobile-menu ul{ list-style:none; padding:8px 6vw 20px; }
@@ -144,9 +144,9 @@
   }
   .mobile-menu a::before{ content:"./"; color:var(--text-faint); }
   .mobile-menu a.active{ color:var(--amber); }
-  .mobile-menu.open{ max-height:420px; }
+  .mobile-menu.open{ max-height:calc(100vh - 64px); overflow-y:auto; visibility:visible; }
 
-  @media (max-width: 720px){
+  @media (max-width: 1020px){
     nav{ display:none; }
     .nav-toggle{ display:flex; }
   }
@@ -571,6 +571,7 @@
       <li><a href="#certs">certs</a></li>
       <li><a href="research.html">casework</a></li>
       <li><a href="articles/">articles</a></li>
+      <li><a href="saudi-cyber-regulation.html">Defense Function</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
   </nav>
@@ -588,6 +589,7 @@
     <li><a href="#certs">certs</a></li>
     <li><a href="research.html">casework</a></li>
     <li><a href="articles/">articles</a></li>
+    <li><a href="saudi-cyber-regulation.html">Defense Function</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
 </div>
@@ -606,6 +608,7 @@
 
   <div class="cert-strip">
     <span class="cert-pill">GIAC · GCFA</span>
+    <span class="cert-pill">GEIR</span>
     <span class="cert-pill">GNFA</span>
     <span class="cert-pill">CCNP</span>
     <span class="cert-pill">CySA+</span>
@@ -648,7 +651,7 @@
       <div class="stat-row"><span class="label">FOCUS</span><span class="value">Cyber Defense</span></div>
       <div class="stat-row"><span class="label">SECTOR</span><span class="value">Banking</span></div>
       <div class="stat-row"><span class="label">BASE</span><span class="value">Riyadh, SA</span></div>
-      <div class="stat-row"><span class="label">CERTS HELD</span><span class="value">11</span></div>
+      <div class="stat-row"><span class="label">CERTS HELD</span><span class="value">12</span></div>
       <div class="stat-row"><span class="label">STATUS</span><span class="value">Open to network</span></div>
     </div>
   </div>
@@ -770,6 +773,7 @@
   <h2>Certifications</h2>
   <div class="cert-grid">
     <div class="cert-box" data-reveal><div class="code">GCFA</div><div class="name">GIAC Certified Forensic Analyst</div></div>
+    <a class="cert-box" data-reveal href="https://www.giac.org/certifications/enterprise-incident-responder-geir"><div class="code">GEIR</div><div class="name">GIAC Enterprise Incident Response</div></a>
     <div class="cert-box" data-reveal><div class="code">GNFA</div><div class="name">GIAC Network Forensic Analyst</div></div>
     <div class="cert-box" data-reveal><div class="code">CCNP</div><div class="name">Cisco Certified Network Professional</div></div>
     <div class="cert-box" data-reveal><div class="code">CySA+</div><div class="name">CompTIA Cybersecurity Analyst</div></div>
