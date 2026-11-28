@@ -40,9 +40,33 @@
   .practice dl { display:grid; grid-template-columns:10rem 1fr; gap:.65rem 1rem; margin:0; }
   .practice dt { font-weight:700; }
   .practice dd { margin:0; color:var(--muted); }
-  .handoff { margin-top:1rem; background:var(--panel); border-inline-start:2px solid var(--accent); padding:1rem 1.25rem; }
-  .handoff ol { margin:.55rem 0 0; padding-inline-start:1.35rem; }
-  .handoff li + li { margin-top:.35rem; }
+  .handoff { margin:1.6rem 0 1.9rem; background:var(--panel); border:1px solid var(--line); padding:clamp(1rem,3vw,1.6rem); }
+  .handoff h3 { font-size:clamp(1.3rem,3vw,1.75rem); line-height:1.2; }
+  .handoff-caption { color:var(--muted); margin:.45rem 0 1rem; }
+  .flow { display:grid; grid-template-columns:minmax(0,1fr) 6rem minmax(0,1fr) 6rem minmax(0,1fr); gap:.45rem; align-items:start; }
+  .flow-step { --step:#80d7ce; background:var(--bg); border:1px solid var(--line); border-top:3px solid var(--step); }
+  .flow-step.soc { --step:#a7bdfd; }
+  .flow-step.ir { --step:#edbd90; }
+  .flow-step summary { position:relative; display:grid; gap:.28rem; padding:.9rem 1.8rem .9rem .9rem; cursor:pointer; list-style:none; }
+  .flow-step summary::-webkit-details-marker { display:none; }
+  .flow-step summary::after { content:"+"; position:absolute; right:.8rem; top:.8rem; color:var(--step); }
+  .flow-step[open] summary::after { content:"−"; }
+  .flow-step summary:focus-visible { outline:2px solid var(--step); outline-offset:3px; }
+  .flow-step summary:hover { background:#ffffff07; }
+  .flow-team { color:var(--step); font-weight:700; letter-spacing:.08em; }
+  .flow-title { font-weight:700; line-height:1.35; }
+  .flow-step p { margin:0 .9rem .9rem; padding-top:.7rem; border-top:1px solid var(--line); color:var(--muted); }
+  .flow-arrow { display:grid; gap:.1rem; align-content:center; justify-items:center; min-height:5.6rem; text-align:center; color:var(--muted); font-size:.88rem; line-height:1.25; }
+  .flow-arrow > span:last-child { color:var(--accent); font-size:1.6rem; }
+  .flow-arrow .down { display:none; }
+  .feedback { margin-top:1rem; padding:.72rem .85rem; border:1px dashed #54717e; }
+  .feedback strong { color:var(--accent); }
+  @media(max-width:50rem) {
+    .flow { grid-template-columns:minmax(0,1fr); gap:.35rem; }
+    .flow-arrow { display:flex; justify-content:center; align-items:center; gap:.5rem; min-height:2.2rem; }
+    .flow-arrow .right { display:none; }
+    .flow-arrow .down { display:inline; }
+  }
   @media(max-width:36rem) { .practice dl { grid-template-columns:1fr; gap:.14rem; } .practice dd + dt { margin-top:.55rem; } }
   .application { margin-top:2.7rem; padding-top:1.5rem; border-top:1px solid var(--line); }
   .application h2 { font-size:1.5rem; }
@@ -60,7 +84,7 @@
   <h1>Saudi cybersecurity regulation</h1>
   <p class="intro">A starting point for security teams reviewing national cybersecurity controls and financial-sector requirements in Saudi Arabia.</p>
   <nav class="jump" aria-label="On this page"><div>
-    <a href="#nca">NCA</a><a href="#sama">SAMA</a><a href="#soc">SOC</a><a href="#ir">Incident response</a><a href="#cti">Threat intelligence</a>
+    <a href="#nca">NCA</a><a href="#sama">SAMA</a><a href="#workflow">Team workflow</a><a href="#soc">SOC</a><a href="#ir">Incident response</a><a href="#cti">Threat intelligence</a>
   </div></nav>
   <div class="regulators">
     <section class="regulator" id="nca" aria-labelledby="nca-title">
@@ -101,6 +125,29 @@
   <section class="operations" aria-labelledby="operations-title">
     <h2 id="operations-title">SOC, IR and CTI in practice</h2>
     <p>The references identify the relevant controls. The workflows, evidence and measures below are implementation examples. Confirm applicability and reporting obligations against the official texts.</p>
+    <figure class="handoff" id="workflow" aria-labelledby="handoff-title">
+      <figcaption>
+        <h3 id="handoff-title">How the teams work together</h3>
+        <p class="handoff-caption">Example: a suspicious sign-in advisory. Open a stage to see what each team hands off.</p>
+      </figcaption>
+      <div class="flow">
+        <details class="flow-step cti">
+          <summary><span class="flow-team">CTI</span><span class="flow-title">Validate the advisory</span></summary>
+          <p><strong>To SOC:</strong> the source, confidence, affected services and indicators to check.</p>
+        </details>
+        <div class="flow-arrow"><span>Intelligence brief</span><span aria-hidden="true"><span class="right">→</span><span class="down">↓</span></span></div>
+        <details class="flow-step soc">
+          <summary><span class="flow-team">SOC</span><span class="flow-title">Triage and escalate</span></summary>
+          <p><strong>To IR:</strong> corroborating log evidence, affected accounts, initial severity and telemetry gaps.</p>
+        </details>
+        <div class="flow-arrow"><span>Escalated case</span><span aria-hidden="true"><span class="right">→</span><span class="down">↓</span></span></div>
+        <details class="flow-step ir">
+          <summary><span class="flow-team">IR</span><span class="flow-title">Investigate and contain</span></summary>
+          <p><strong>To SOC and CTI:</strong> confirmed findings, remaining gaps and actions to improve coverage.</p>
+        </details>
+      </div>
+      <p class="feedback"><strong>↶ Findings back to SOC and CTI.</strong> SOC updates detection logic or monitoring coverage. CTI updates the advisory and its confidence using the investigation’s evidence.</p>
+    </figure>
     <article class="practice" id="soc">
       <h3>SOC · Monitoring and triage</h3>
       <div class="references">
@@ -138,14 +185,6 @@
         <dt>Operational measures</dt><dd>Time from a relevant advisory to a documented triage decision, and the share of high-priority intelligence items that led to a recorded action.</dd>
       </dl>
     </article>
-    <aside class="handoff" aria-labelledby="handoff-title">
-      <h3 id="handoff-title">Example · Suspicious sign-in advisory</h3>
-      <ol>
-        <li><strong>CTI</strong> validates the advisory, explains which services may be affected and sends the SOC the indicators with source and confidence.</li>
-        <li><strong>SOC</strong> checks relevant identity and endpoint telemetry, records gaps, and escalates a corroborated alert under the incident criteria.</li>
-        <li><strong>IR</strong> assesses scope, coordinates containment and any required notification, and shares confirmed findings back with SOC and CTI.</li>
-      </ol>
-    </aside>
   </section>
   <section class="application">
     <h2>Start with applicability</h2>
