@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A practical starting point for Saudi cybersecurity regulation, with official NCA controls and the SAMA Cyber Security Framework.">
+<meta name="description" content="A practical starting point for Saudi cybersecurity regulation, mapping NCA and SAMA references to security operations, incident response and threat intelligence.">
 <title>Saudi Cybersecurity Regulation — Hani Alsulami</title>
 <link rel="canonical" href="https://hani-alsulami.github.io/saudi-cyber-regulation.html">
 <style>
@@ -22,7 +22,7 @@
   h1,h2,h3,p { margin:0; }
   h1 { max-width:18ch; font-size:clamp(2.2rem,5.8vw,4.8rem); line-height:1.04; letter-spacing:-.045em; }
   .intro { max-width:65ch; margin-top:1.1rem; color:var(--muted); font-size:1.12rem; }
-  .jump { display:flex; flex-wrap:wrap; gap:.6rem 1.3rem; margin-block:1rem 2.6rem; }
+  .jump { min-height:0; display:flex; flex-wrap:wrap; gap:.6rem 1.3rem; margin-block:1rem 2.6rem; }
   .regulators { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
   .regulator { padding:clamp(1.1rem,3vw,1.7rem); background:var(--panel); border:1px solid var(--line); border-top:2px solid var(--accent); }
   .regulator h2 { font-size:1.3rem; line-height:1.25; }
@@ -31,6 +31,19 @@
   .document + .document { border-top:1px solid var(--line); margin-top:.9rem; padding-top:.9rem; }
   .document h3 { font-size:1rem; }
   .document p { margin-top:.3rem; color:var(--muted); }
+  .operations { margin-top:3.2rem; }
+  .operations > h2 { font-size:clamp(1.65rem,4vw,2.4rem); line-height:1.12; }
+  .operations > p { color:var(--muted); margin:.6rem 0 1.4rem; max-width:72ch; }
+  .practice { padding-block:1.4rem; border-top:1px solid var(--line); }
+  .practice h3 { font-size:1.35rem; }
+  .references { display:flex; flex-wrap:wrap; gap:.3rem 1rem; margin-block:.35rem .95rem; }
+  .practice dl { display:grid; grid-template-columns:10rem 1fr; gap:.65rem 1rem; margin:0; }
+  .practice dt { font-weight:700; }
+  .practice dd { margin:0; color:var(--muted); }
+  .handoff { margin-top:1rem; background:var(--panel); border-inline-start:2px solid var(--accent); padding:1rem 1.25rem; }
+  .handoff ol { margin:.55rem 0 0; padding-inline-start:1.35rem; }
+  .handoff li + li { margin-top:.35rem; }
+  @media(max-width:36rem) { .practice dl { grid-template-columns:1fr; gap:.14rem; } .practice dd + dt { margin-top:.55rem; } }
   .application { margin-top:2.7rem; padding-top:1.5rem; border-top:1px solid var(--line); }
   .application h2 { font-size:1.5rem; }
   .application p { max-width:72ch; color:var(--muted); margin-top:.5rem; }
@@ -46,7 +59,9 @@
 <main class="wrap">
   <h1>Saudi cybersecurity regulation</h1>
   <p class="intro">A starting point for security teams reviewing national cybersecurity controls and financial-sector requirements in Saudi Arabia.</p>
-  <div class="jump" aria-label="On this page"><a href="#nca">NCA controls ↓</a><a href="#sama">SAMA framework ↓</a></div>
+  <nav class="jump" aria-label="On this page"><div>
+    <a href="#nca">NCA</a><a href="#sama">SAMA</a><a href="#soc">SOC</a><a href="#ir">Incident response</a><a href="#cti">Threat intelligence</a>
+  </div></nav>
   <div class="regulators">
     <section class="regulator" id="nca" aria-labelledby="nca-title">
       <h2 id="nca-title">National Cybersecurity Authority <abbr title="National Cybersecurity Authority">(NCA)</abbr></h2>
@@ -77,8 +92,61 @@
         <h3><a href="https://rulebook.sama.gov.sa/en/14-applicability-3">Framework applicability</a></h3>
         <p>Official guidance on entities and requirements within the framework’s scope.</p>
       </div>
+      <div class="document">
+        <h3><a href="https://rulebook.sama.gov.sa/en/financial-sector-cyber-threat-intelligence-principles-0">Financial Sector Cyber Threat Intelligence Principles</a></h3>
+        <p>Guidance on the intelligence lifecycle, from defining requirements to producing and sharing intelligence.</p>
+      </div>
     </section>
   </div>
+  <section class="operations" aria-labelledby="operations-title">
+    <h2 id="operations-title">SOC, IR and CTI in practice</h2>
+    <p>The references identify the relevant controls. The workflows, evidence and measures below are implementation examples. Confirm applicability and reporting obligations against the official texts.</p>
+    <article class="practice" id="soc">
+      <h3>SOC · Monitoring and triage</h3>
+      <div class="references">
+        <a href="https://nca.gov.sa/en/regulatory-documents/controls-list/ecc/">NCA ECC 2-12 · Event logs and monitoring</a>
+        <a href="https://rulebook.sama.gov.sa/en/3314-cyber-security-event-management-0">SAMA CSF 3.3.14 · Event management</a>
+      </div>
+      <dl>
+        <dt>Workflow</dt><dd>Inventory critical log sources and their owners. Monitor ingestion from critical systems, privileged accounts and remote access. Assign alert severity, record the analyst’s decision, and open an incident when escalation criteria are met.</dd>
+        <dt>Evidence examples</dt><dd>Approved log-source inventory, collection and retention settings, a sample log retrieval, ingestion failure tickets, and an alert with the analyst’s triage notes and escalation timestamps.</dd>
+        <dt>Operational measures</dt><dd>Share of expected log sources reporting within their agreed window, median time from alert creation to triage, and the number of unresolved telemetry gaps by severity.</dd>
+      </dl>
+    </article>
+    <article class="practice" id="ir">
+      <h3>IR · Response and recovery</h3>
+      <div class="references">
+        <a href="https://nca.gov.sa/en/regulatory-documents/controls-list/ecc/">NCA ECC 2-13-3.1 to 2-13-3.4 · Response, classification and reporting</a>
+        <a href="https://rulebook.sama.gov.sa/en/3315-cyber-security-incident-management-0">SAMA CSF 3.3.15 · Incident management</a>
+      </div>
+      <dl>
+        <dt>Workflow</dt><dd>Classify the incident and name the response lead. Preserve evidence, record decisions on containment and recovery, and have the designated owner assess notification duties, timelines and approved channels for each applicable authority.</dd>
+        <dt>Evidence examples</dt><dd>Incident timeline, severity rationale, evidence register and chain of custody, containment decisions, notification record where applicable, recovery validation, and a post-incident review with action owners.</dd>
+        <dt>Operational measures</dt><dd>Time from incident declaration to confirmed containment by severity, and the proportion of corrective actions closed by their due date.</dd>
+      </dl>
+    </article>
+    <article class="practice" id="cti">
+      <h3>CTI · Intelligence that leads to action</h3>
+      <div class="references">
+        <a href="https://nca.gov.sa/en/regulatory-documents/controls-list/ecc/">NCA ECC 2-13-3.4 and 2-13-3.5 · Sharing and intelligence feeds</a>
+        <a href="https://rulebook.sama.gov.sa/en/3316-threat-management-0">SAMA CSF 3.3.16 · Threat management</a>
+        <a href="https://rulebook.sama.gov.sa/en/financial-sector-cyber-threat-intelligence-principles-0">SAMA financial-sector CTI principles</a>
+      </div>
+      <dl>
+        <dt>Workflow</dt><dd>Define intelligence requirements around critical services and relevant threats. Record source credibility, relevance and confidence. Send actionable findings to the right owner with handling restrictions, an expiration date where appropriate, and a way to report the outcome.</dd>
+        <dt>Evidence examples</dt><dd>Intelligence requirements, source register, an assessment with its confidence rationale, dissemination record, and a linked SOC investigation or detection coverage ticket.</dd>
+        <dt>Operational measures</dt><dd>Time from a relevant advisory to a documented triage decision, and the share of high-priority intelligence items that led to a recorded action.</dd>
+      </dl>
+    </article>
+    <aside class="handoff" aria-labelledby="handoff-title">
+      <h3 id="handoff-title">Example · Suspicious sign-in advisory</h3>
+      <ol>
+        <li><strong>CTI</strong> validates the advisory, explains which services may be affected and sends the SOC the indicators with source and confidence.</li>
+        <li><strong>SOC</strong> checks relevant identity and endpoint telemetry, records gaps, and escalates a corroborated alert under the incident criteria.</li>
+        <li><strong>IR</strong> assesses scope, coordinates containment and any required notification, and shares confirmed findings back with SOC and CTI.</li>
+      </ol>
+    </aside>
+  </section>
   <section class="application">
     <h2>Start with applicability</h2>
     <p>Check the entity type and services in scope, then record the official version and control references. Assign an owner and document the evidence that demonstrates each applicable control. Where multiple frameworks apply, keep each requirement traceable to its official source.</p>
