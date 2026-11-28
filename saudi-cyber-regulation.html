@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A practical starting point for Saudi cybersecurity regulation, mapping NCA and SAMA references to security operations, incident response and threat intelligence.">
-<title>Saudi Cybersecurity Regulation — Hani Alsulami</title>
+<meta name="description" content="A guide to the cyber defense function, connecting SOC, incident response and threat intelligence with Saudi NCA and SAMA controls and the SOC target operating model.">
+<title>Defense Function — Hani Alsulami</title>
 <link rel="canonical" href="https://hani-alsulami.github.io/saudi-cyber-regulation.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,6 +91,19 @@ footer { border-top:1px solid var(--line); padding-block:1.2rem; }
   .flow-detail,.practice dl { grid-template-columns:1fr; gap:.2rem; }
   .practice dd + dt { margin-top:.5rem; }
 }
+.operating-model { padding:clamp(1rem,3vw,1.9rem); border:1px solid var(--line); border-radius:14px; background:var(--white); }
+.operating-model h3 { font-size:clamp(1.25rem,2.5vw,1.65rem); line-height:1.25; letter-spacing:-.03em; }
+.operating-model > p { color:var(--muted); max-width:72ch; margin:.55rem 0 1.1rem; }
+.model-roadmap { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:0 0 1.05rem; padding:0; list-style:none; border-block:1px solid var(--line); }
+.model-roadmap li { padding:.85rem 1rem .85rem 0; color:var(--muted); }
+.model-roadmap li + li { border-inline-start:1px solid var(--line); padding-inline-start:1rem; }
+.model-roadmap strong { color:var(--ink); display:block; margin-bottom:.2rem; }
+.operating-model > a { font-weight:650; }
+@media(max-width:600px) {
+  .model-roadmap { grid-template-columns:1fr; }
+  .model-roadmap li { padding-inline:0; }
+  .model-roadmap li + li { border-inline-start:0; border-top:1px solid var(--line); padding-inline-start:0; }
+}
 </style>
 </head>
 <body>
@@ -100,10 +113,10 @@ footer { border-top:1px solid var(--line); padding-block:1.2rem; }
 </div></header>
 <main class="wrap">
   <section class="hero">
-    <h1>Saudi cybersecurity regulation</h1>
+    <h1>Defense Function</h1>
     <div>
-      <p class="hero-copy">How NCA and SAMA controls connect to monitoring, incident response and threat intelligence.</p>
-      <nav class="jump" aria-label="On this page"><a href="#workflow">Team workflow</a><a href="#operations">Operational guide</a><a href="#official">Official references</a></nav>
+      <p class="hero-copy">How SOC, incident response and threat intelligence work together, with Saudi cybersecurity controls and a target operating model to guide improvement.</p>
+      <nav class="jump" aria-label="On this page"><a href="#workflow">Team workflow</a><a href="#operations">Operational guide</a><a href="#operating-model">Operating model</a><a href="#official">Official references</a></nav>
     </div>
   </section>
   <figure class="handoff" id="workflow" aria-labelledby="handoff-title">
@@ -167,6 +180,20 @@ footer { border-top:1px solid var(--line); padding-block:1.2rem; }
       </dl>
     </article>
     </div>
+  </section>
+  <section class="chapter" id="operating-model" aria-labelledby="operating-title">
+    <h2 id="operating-title">Target operating model</h2>
+    <p>Use the SOC-CMM paper as an operating model reference. The applicability and wording of Saudi regulatory requirements come from NCA and SAMA.</p>
+    <article class="operating-model">
+      <h3>Defining and operationalising a SOC Target Operating Model</h3>
+      <p>The paper describes how to set goals and a target date, assess current capability, agree on a target state, and turn the gaps into a continuous improvement backlog. Here is how to apply that sequence across the defense function.</p>
+      <ol class="model-roadmap">
+        <li><strong>Assess the current state</strong>Review SOC telemetry coverage, IR readiness and the quality of CTI handoffs. Record the evidence behind each gap.</li>
+        <li><strong>Set the target state</strong>Define the services, owners and success measures you want by the target date. Have the responsible leadership approve the target and its resources.</li>
+        <li><strong>Build the roadmap</strong>Prioritize gaps by risk and dependency. Give each item an owner and a completion check, then reassess progress against the baseline.</li>
+      </ol>
+      <a href="https://www.soc-cmm.com/img/upload/files/3-soctom-whitepaper.pdf">Read the SOC-CMM white paper (PDF) →</a>
+    </article>
   </section>
   <section class="chapter" id="official" aria-labelledby="official-title">
     <h2 id="official-title">Official references</h2>
