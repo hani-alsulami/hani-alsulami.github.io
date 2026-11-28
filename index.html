@@ -199,6 +199,14 @@
   .job.now .job-card::before{border-color:var(--mint);background:var(--mint);box-shadow:0 0 0 4px rgba(62,207,142,.15)}
   .job.now .job-card{border-color:rgba(53,199,214,.35);background:linear-gradient(180deg,rgba(53,199,214,.06),var(--card) 50%)}
   .timeline::before{content:"";position:absolute;left:254px;top:36px;bottom:30px;width:1px;background:linear-gradient(180deg,var(--mint),var(--line-2) 30%,var(--line))}
+  .job-head{display:flex;gap:18px;align-items:flex-start}
+  .job-head > div{min-width:0}
+  .elogo{flex:none;height:56px;min-width:56px;padding:0 10px;border-radius:14px;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+  .elogo img{display:block;max-height:38px;max-width:100px;width:auto;height:auto}
+  .elogo.wide img{max-height:24px}
+  .elogo.round{padding:0;background:none;border-radius:50%}
+  .elogo.round img{max-height:none;max-width:none;width:56px;height:56px}
+  .elogo.mono{background:var(--bg-2);border:1px solid var(--line-2);box-shadow:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--cyan)}
   .job h3{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
   .org{font-size:14px;color:var(--cyan);margin-top:4px}
   .now-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:#04110d;background:var(--mint);padding:2px 8px;border-radius:6px;margin-left:10px;vertical-align:middle;text-transform:uppercase}
@@ -343,6 +351,11 @@
     .about-text p:first-child{font-size:18.5px}
     .job-card{padding:22px 20px}
     .job h3{font-size:18.5px}
+    .job-head{flex-direction:column;gap:14px}
+    .elogo{height:48px;min-width:48px;border-radius:12px}
+    .elogo img{max-height:32px}
+    .elogo.wide img{max-height:20px}
+    .elogo.round img{width:48px;height:48px}
   }
 </style>
 </head>
@@ -497,8 +510,8 @@
       <div class="job now" data-reveal>
         <div class="job-when"><div class="d">Mar 2026 – Present</div></div>
         <div class="job-card">
-          <h3>Head of Cyber Defense &amp; Response <span class="now-badge">Now</span></h3>
-          <div class="org">D360 Bank · Full-time · On-site</div>
+          <div class="job-head"><div class="elogo"><img src="assets/logos/d360.png" alt="D360 Bank logo" width="36" height="38"></div><div><h3>Head of Cyber Defense &amp; Response <span class="now-badge">Now</span></h3>
+          <div class="org">D360 Bank · Full-time · On-site</div></div></div>
           <ul>
             <li>Lead the SOC and DFIR teams end-to-end for organizational resilience.</li>
             <li>Oversee 24/7 threat monitoring, detection engineering, and alert orchestration.</li>
@@ -512,8 +525,8 @@
       <div class="job" data-reveal>
         <div class="job-when"><div class="d">Jan 2025 – Mar 2026</div><div class="dur">1 yr 3 mos</div></div>
         <div class="job-card">
-          <h3>Assistant Manager, Cybersecurity Incident Response &amp; Investigation Unit</h3>
-          <div class="org">Riyad Bank · Full-time · Saudi Arabia · On-site</div>
+          <div class="job-head"><div class="elogo"><img src="assets/logos/riyad-bank.png" alt="Riyad Bank logo" width="38" height="38"></div><div><h3>Assistant Manager, Cybersecurity Incident Response &amp; Investigation Unit</h3>
+          <div class="org">Riyad Bank · Full-time · Saudi Arabia · On-site</div></div></div>
           <ul>
             <li>Directed all cybersecurity IR and digital forensics investigations, ensuring quick containment and recovery.</li>
             <li>Developed and refined IR plans, playbooks, and forensic methodologies aligned with best practice and regulation.</li>
@@ -527,8 +540,8 @@
       <div class="job" data-reveal>
         <div class="job-when"><div class="d">Jan 2023 – Dec 2024</div><div class="dur">2 yrs</div></div>
         <div class="job-card">
-          <h3>Incident Response Specialist</h3>
-          <div class="org">The Saudi National Bank (SNB) · Full-time · Saudi Arabia</div>
+          <div class="job-head"><div class="elogo round"><img src="assets/logos/snb.png" alt="The Saudi National Bank logo" width="56" height="56"></div><div><h3>Incident Response Specialist</h3>
+          <div class="org">The Saudi National Bank (SNB) · Full-time · Saudi Arabia</div></div></div>
           <ul>
             <li>Responded to major and high-impact incidents, coordinating post-incident activity with stakeholders.</li>
             <li>Provided leadership and mentoring for L1/L2 analysts.</li>
@@ -542,8 +555,8 @@
       <div class="job" data-reveal>
         <div class="job-when"><div class="d">3 yrs 1 mo total</div></div>
         <div class="job-card">
-          <h3>Digital Forensics &amp; Incident Response — Analyst → Senior Analyst</h3>
-          <div class="org">SITE سايت · Full-time · Riyadh, Saudi Arabia</div>
+          <div class="job-head"><div class="elogo wide"><img src="assets/logos/site.png" alt="SITE logo" width="86" height="24"></div><div><h3>Digital Forensics &amp; Incident Response — Analyst → Senior Analyst</h3>
+          <div class="org">SITE سايت · Full-time · Riyadh, Saudi Arabia</div></div></div>
           <ul>
             <li>Monitored available intelligence sources for indicators of compromise and emerging threats.</li>
             <li>Progressed from Analyst to Senior Analyst across the DFIR function.</li>
